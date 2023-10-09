@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,7 +29,7 @@ public class EtronAbonnementController {
 	private EtronAbonnementService etronabonnementService;
 	
 	@PostMapping(value = "/inscription")
-	public ResponseEntity<String> inscriptionUser(Map<String, String> requestMap){
+	public ResponseEntity<String> inscriptionUser(@RequestBody Map<String, String> requestMap){
 		try {
             return etronabonnementService.inscrireUtilisateur(requestMap);
         }catch (Exception ex) {
@@ -38,7 +39,7 @@ public class EtronAbonnementController {
 	}
 	
 	@PostMapping(value="login")
-	public ResponseEntity<String> login(Map<String, String> requestMap) {
+	public ResponseEntity<String> login(@RequestBody Map<String, String> requestMap) {
 		try {
 			return etronabonnementService.login(requestMap);
 		} catch (Exception e) {
@@ -59,7 +60,7 @@ public class EtronAbonnementController {
 	}
 	
 	@PostMapping(value="/changePassword")
-	public ResponseEntity<String> changePassword(Map<String, String> requestMap) {
+	public ResponseEntity<String> changePassword(@RequestBody Map<String, String> requestMap) {
 		try {
 			return etronabonnementService.changePassword(requestMap);
 		}
@@ -69,7 +70,7 @@ public class EtronAbonnementController {
 		return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	@PostMapping(value="/forgotPassword")
-	public ResponseEntity<String> forgotPassword(Map<String, String> requestMap) {
+	public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> requestMap) {
 		try {
 			return etronabonnementService.forgotPassword(requestMap);
 		}
@@ -81,9 +82,9 @@ public class EtronAbonnementController {
 
 	
 	@PostMapping(value="/choisirplan")
-	public ResponseEntity<String> choisirAbonnement(@RequestParam("idUser") int idUser ,@RequestParam("typeAbonnement") String typeAbonnement ){
+	public ResponseEntity<String> choisirAbonnement(@RequestBody Map<String,String> requestMap ){
 		try {
-            return etronabonnementService.choisirFormuleAbonnement(idUser, typeAbonnement);
+            return etronabonnementService.choisirFormuleAbonnement(requestMap);
         }catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -91,9 +92,9 @@ public class EtronAbonnementController {
 	}
 	
 	@PostMapping(value="/paiement")
-	public ResponseEntity<String> effectuerPaiement(@RequestParam("idUser") int idUser ,@RequestParam("typeAbonnement") String typeAbonnement ){
+	public ResponseEntity<String> effectuerPaiement(@RequestBody Map<String,String> requestMap ){
 		try {
-            return etronabonnementService.effectuerPaiementAvecCode(idUser, typeAbonnement);
+            return etronabonnementService.effectuerPaiementAvecCode(requestMap);
         }catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -111,14 +112,47 @@ public class EtronAbonnementController {
 		return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@GetMapping(value="calculerFactureMensuelle")
-	public ResponseEntity<Facture> calculerFactureMensuelle(@RequestParam("idUser") int idUser,@RequestParam("mois") int mois, @RequestParam("annee") int annee){
+	@PostMapping(value="/calculerFactureMensuelle")
+	public ResponseEntity<Facture> calculerFactureMensuelle(@RequestBody Map<String,String> requestMap){
 		try {
-			return etronabonnementService.calculerFactureMensuelle(idUser, mois, annee);
+			return etronabonnementService.calculerFactureMensuelle(requestMap);
 			
 		} catch(Exception e){
 			e.printStackTrace();
 		}
 		return new ResponseEntity<>(new Facture(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
+	@PostMapping(value="/AjoutVoiture")
+	public ResponseEntity<String> addVoiture(@RequestBody Map<String, String> requestMap){
+		try {
+            return etronabonnementService.addVoiture(requestMap);
+        }catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG , HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	
+	
+	@PostMapping(value="/AjoutRecharge")
+	public ResponseEntity<String> AjoutRecharge(@RequestBody Map<String, String> requestMap){
+		try {
+            return etronabonnementService.addRecharge(requestMap);
+        }catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG , HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@PostMapping(value="/AjoutAbonnement")
+	public ResponseEntity<String> AjoutAbonnement(@RequestBody Map<String,String> requestMap){
+		try {
+            return etronabonnementService.addAbonnement(requestMap);
+        }catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG , HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
 }

@@ -13,7 +13,7 @@ public class Voiture {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idVoiture;
 	
-	private int modele;
+	private String modele;
 	
 	@OneToOne
 	private User user;
@@ -26,11 +26,11 @@ public class Voiture {
 		this.idVoiture = idVoiture;
 	}
 
-	public int getModele() {
+	public String getModele() {
 		return modele;
 	}
 
-	public void setModele(int modele) {
+	public void setModele(String modele) {
 		this.modele = modele;
 	}
 
