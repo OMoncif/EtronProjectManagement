@@ -113,14 +113,14 @@ public class EtronAbonnementController {
 	}
 	
 	@PostMapping(value="/calculerFactureMensuelle")
-	public ResponseEntity<Facture> calculerFactureMensuelle(@RequestBody Map<String,String> requestMap){
+	public ResponseEntity<String> calculerFactureMensuelle(@RequestBody Map<String,String> requestMap){
 		try {
 			return etronabonnementService.calculerFactureMensuelle(requestMap);
 			
 		} catch(Exception e){
 			e.printStackTrace();
 		}
-		return new ResponseEntity<>(new Facture(), HttpStatus.INTERNAL_SERVER_ERROR);
+		return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@PostMapping(value="/AjoutVoiture")
@@ -149,6 +149,17 @@ public class EtronAbonnementController {
 	public ResponseEntity<String> AjoutAbonnement(@RequestBody Map<String,String> requestMap){
 		try {
             return etronabonnementService.addAbonnement(requestMap);
+        }catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG , HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	//addBorneRecharge
+	@PostMapping(value="/addBorneRecharge")
+	public ResponseEntity<String> addBorneRecharge(@RequestBody Map<String,String> requestMap){
+		try {
+            return etronabonnementService.addBorneRecharge(requestMap);
         }catch (Exception ex) {
             ex.printStackTrace();
         }

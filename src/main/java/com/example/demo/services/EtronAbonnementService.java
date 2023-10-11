@@ -2,6 +2,7 @@ package com.example.demo.services;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import com.example.demo.models.Voiture;
 import com.example.demo.repositories.AbonnementPlanRepository;
 import com.example.demo.repositories.BorneRechargeRepository;
 import com.example.demo.repositories.ContratRepository;
+import com.example.demo.repositories.FactureRepository;
 import com.example.demo.repositories.PaiementRepository;
 import com.example.demo.repositories.RechargeRepository;
 import com.example.demo.repositories.UserRepository;
@@ -80,6 +82,9 @@ public class EtronAbonnementService {
 	
 	@Autowired
 	private RechargeRepository rechargerepos;
+	
+	@Autowired
+	private FactureRepository facturerepos;
 	
 	/*public ResponseEntity<String> inscrireUtilisateur(String nom, String prenom, String adresse, String numeroTelephone, String email) {
         User user = new User();
@@ -285,46 +290,67 @@ public class EtronAbonnementService {
 		
 	}
 	
-	public ResponseEntity<Facture> calculerFactureMensuelle(Map<String,String> requestMap) {
+	public ResponseEntity<String> calculerFactureMensuelle(Map<String,String> requestMap) {
         // Obtenez les données de recharge de l'utilisateur pour le mois et l'année donnés.
+		
+		System.out.println("idUser: " + Integer.parseInt(requestMap.get("idUser")) + "mois : " + requestMap.get("mois") + "annee:" + requestMap.get("annee"));
 		try {
+			
 			User user = userrepos.findById(Integer.parseInt(requestMap.get("idUser")));
+			Facture f = facturerepos.getFactureByUserAndAnneeAndMois(user, Integer.parseInt(requestMap.get("mois")), Integer.parseInt(requestMap.get("annee")));
 	        List<Recharge> recharges = rechargerepos.findByUserAndMoisAndAnnee(user, Integer.parseInt(requestMap.get("mois")), Integer.parseInt(requestMap.get("annee")));
+	        if (Objects.isNull(f)) {
+	        	double montantTotal = 0.0;
 
-	        double montantTotal = 0.0;
+		        for (Recharge recharge : recharges) {
+		            double quantiteEnergie = recharge.getQuantiteEnergie(); // en kWh
+		            String typeCharge = recharge.getTypeCharge(); // AC, DC/HPC, haute puissance
+		            int dureeRechargeEnMinutes = recharge.getDureeRecharge();
+		            
+		            double coutRecharge = calculerCoutRecharge(quantiteEnergie, typeCharge, user.getContrat().getPlan().getType(), dureeRechargeEnMinutes);
+		            montantTotal += coutRecharge;
+		        }
 
-	        for (Recharge recharge : recharges) {
-	            double quantiteEnergie = recharge.getQuantiteEnergie(); // en kWh
-	            String typeCharge = recharge.getTypeCharge(); // AC, DC/HPC, haute puissance
-	            int dureeRechargeEnMinutes = recharge.getDureeRecharge();
-	            
-	            double coutRecharge = calculerCoutRecharge(quantiteEnergie, typeCharge, user.getContrat().getPlan().getType(), dureeRechargeEnMinutes);
-	            montantTotal += coutRecharge;
+		        LocalDate dateActuelle = LocalDate.now();
+		        int jourActuel = dateActuelle.getDayOfMonth();
+		        LocalDate dateDemandeFacture = LocalDate.of(Integer.parseInt(requestMap.get("annee")), Integer.parseInt(requestMap.get("mois")), jourActuel);
+		        Facture facture = new Facture();
+		        facture.setContrat(user.getContrat());
+		        facture.setDateFacturation(dateDemandeFacture);
+		        facture.setMontantTotal(montantTotal);
+		        
+		        facturerepos.save(facture);
+		        
+		        return EtronPrjUtils.getResponseEntity("Facture Successfully Registered", HttpStatus.OK);
+	        } else {
+	        	return EtronPrjUtils.getResponseEntity("Facture Already Exists", HttpStatus.OK);
 	        }
 
-	        LocalDate dateActuelle = LocalDate.now();
-	        int jourActuel = dateActuelle.getDayOfMonth();
-	        LocalDate dateDemandeFacture = LocalDate.of(Integer.parseInt(requestMap.get("annee")), Integer.parseInt(requestMap.get("mois")), jourActuel);
-	        Facture facture = new Facture();
-	        facture.setContrat(user.getContrat());
-	        facture.setDateFacturation(dateDemandeFacture);
-	        facture.setMontantTotal(montantTotal);
 	        
-	        return new ResponseEntity<>(facture, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return new ResponseEntity<>(new Facture(), HttpStatus.INTERNAL_SERVER_ERROR);
+		return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
 		
     }
 
 	private double calculerCoutRecharge(double quantiteEnergie, String typeCharge, String typeAbonnement, int dureeRechargeEnMinutes) {
 	    double cout = 0.0;
+	    
+	    /*LocalTime heureActuelle = LocalTime.now();
+	    boolean estHeureBloquage = heureActuelle.isBefore(LocalTime.of(21, 0)) || heureActuelle.isAfter(LocalTime.of(9, 0));*/
+	    
+	    LocalTime heureActuelle = LocalTime.now();
+	    LocalTime heureDebutBloquage = LocalTime.of(21, 0);
+	    LocalTime heureFinBloquage = LocalTime.of(9, 0);
 
+	    // Vérifiez si l'heure actuelle est en dehors de la plage horaire spécifiée (21h à 9h du jour suivant).
+	    boolean estHeureBloquage = heureActuelle.isBefore(heureDebutBloquage) && heureActuelle.isAfter(heureFinBloquage);
+	    
 	    if (typeAbonnement.equals("basic")) {
 	        if (typeCharge.equals("AC")) {
 	            cout = quantiteEnergie * 0.50;
-	            if (dureeRechargeEnMinutes > 240) {
+	            if (dureeRechargeEnMinutes > 240 && estHeureBloquage) {
 	                cout += (dureeRechargeEnMinutes - 240) * 0.05;
 	            }
 	        } else if (typeCharge.equals("DC/HPC")) {
@@ -337,8 +363,22 @@ public class EtronAbonnementService {
 	        }
 	    } else if (typeAbonnement.equals("pro")) {
 	        if (typeCharge.equals("AC")) {
+	            cout = quantiteEnergie * 0.35;
+	            if (dureeRechargeEnMinutes > 240 && estHeureBloquage) {
+	                cout += (dureeRechargeEnMinutes - 240) * 0.05;
+	            }
+	        } else if (typeCharge.equals("DC/HPC")) {
+	            cout = quantiteEnergie * 0.63;
+	            if (dureeRechargeEnMinutes > 90 ) {
+	                cout += (dureeRechargeEnMinutes - 90) * 0.15;
+	            }
+	        } else if (typeCharge.equals("haute puissance")) {
+	            cout = quantiteEnergie * 0.50;
+	        }
+	    } else {
+	        if (typeCharge.equals("AC")) {
 	            cout = quantiteEnergie * 0.42;
-	            if (dureeRechargeEnMinutes > 240) {
+	            if (dureeRechargeEnMinutes > 240 && estHeureBloquage) {
 	                cout += (dureeRechargeEnMinutes - 240) * 0.05;
 	            }
 	        } else if (typeCharge.equals("DC/HPC")) {
@@ -348,20 +388,6 @@ public class EtronAbonnementService {
 	            }
 	        } else if (typeCharge.equals("haute puissance")) {
 	            cout = quantiteEnergie * 0.59;
-	        }
-	    } else {
-	        if (typeCharge.equals("AC")) {
-	            cout = quantiteEnergie * 0.35;
-	            if (dureeRechargeEnMinutes > 240) {
-	                cout += (dureeRechargeEnMinutes - 240) * 0.05;
-	            }
-	        } else if (typeCharge.equals("DC/HPC")) {
-	            cout = quantiteEnergie * 0.63;
-	            if (dureeRechargeEnMinutes > 90) {
-	                cout += (dureeRechargeEnMinutes - 90) * 0.15;
-	            }
-	        } else if (typeCharge.equals("haute puissance")) {
-	            cout = quantiteEnergie * 0.50;
 	        }
 	    }
 
@@ -412,15 +438,15 @@ public class EtronAbonnementService {
     public ResponseEntity<String> addRecharge(Map<String,String> requestMap){
         System.out.println("Inside Ajout Recharge :" + requestMap);
     	try {
-            if (requestMap.containsKey("quantiteEnergie") && requestMap.containsKey("typeCharge") && requestMap.containsKey("dateHeureRecharge") && requestMap.containsKey("DureeRecharge")) {
+            if (requestMap.containsKey("quantiteEnergie") && requestMap.containsKey("typeCharge") && requestMap.containsKey("DureeRecharge")) {
             	Recharge recharge = new Recharge();
             	recharge.setQuantiteEnergie(Double.parseDouble(requestMap.get("quantiteEnergie")));
             	recharge.setTypeCharge(requestMap.get("typeCharge"));
             	
-            	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+            	/*DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
-            	LocalDateTime parsedDate = LocalDateTime.parse(requestMap.get("dateHeureRecharge"), formatter);
-            	recharge.setDateHeureRecharge(parsedDate);
+            	LocalDateTime parsedDate = LocalDateTime.parse(requestMap.get("dateHeureRecharge"), formatter);*/
+            	recharge.setDateHeureRecharge(LocalDateTime.now());
             	
             	recharge.setDureeRecharge(Integer.parseInt(requestMap.get("DureeRecharge")));
             	rechargerepos.save(recharge);
@@ -453,6 +479,7 @@ public class EtronAbonnementService {
                     	abonnement.setType(requestMap.get("type"));
                     	abonnement.setFraismois(Double.parseDouble(requestMap.get("fraismois")));
                     	abonnement.setDureeContrat(12);
+                    	abonnement.setFraisAC(Double.parseDouble(requestMap.get("fraisAC")));
                     	abonnement.setFraisDCHPC(Double.parseDouble(requestMap.get("fraisDCHPC")));
                     	abonnement.setFraisHautePuissance(Double.parseDouble(requestMap.get("fraisHautePuissance")));
                     	abonnement.setFraisBlocageAC(Double.parseDouble(requestMap.get("fraisBlocageAC")));
@@ -491,6 +518,39 @@ public class EtronAbonnementService {
                 } else {
                     return EtronPrjUtils.getResponseEntity("Model already exists", HttpStatus.BAD_REQUEST);
                 }
+            } else {
+                return EtronPrjUtils.getResponseEntity(EtronPrjConstants.INVALID_DATA, HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    
+    public boolean getTimeNow() {
+    	System.out.println("time now : "  + LocalTime.now());
+    	return LocalTime.now().isBefore(LocalTime.of(21, 0)) || LocalTime.now().isAfter(LocalTime.of(9, 0));
+    }
+    
+    //BorneRecharge
+    public ResponseEntity<String> addBorneRecharge(Map<String,String> requestMap){
+        System.out.println("Inside Ajout BorneRecharge :" + requestMap);
+    	try {
+            if (requestMap.containsKey("typecharge") && requestMap.containsKey("latitude") && requestMap.containsKey("longitude") && requestMap.containsKey("disponible")) {
+            	BorneRecharge bornerecharge = bornerepos.getBorneByLongitudeAndLatitude(Double.parseDouble(requestMap.get("latitude")),Double.parseDouble(requestMap.get("longitude")));
+            	if(Objects.isNull(bornerecharge)) {
+            		BorneRecharge borne = new BorneRecharge();
+                	borne.setTypecharge(requestMap.get("typecharge"));
+                	borne.setDisponible(Boolean.parseBoolean(requestMap.get("disponible")));
+                	borne.setLatitude(Double.parseDouble(requestMap.get("latitude")));
+                	borne.setLongitude(Double.parseDouble(requestMap.get("longitude")));
+
+                	bornerepos.save(borne);
+                    return EtronPrjUtils.getResponseEntity("BornRecharge Successfully Registered", HttpStatus.OK);
+            	} else {
+            		return EtronPrjUtils.getResponseEntity("Borne already exists", HttpStatus.BAD_REQUEST);
+            	}
+                
             } else {
                 return EtronPrjUtils.getResponseEntity(EtronPrjConstants.INVALID_DATA, HttpStatus.BAD_REQUEST);
             }
