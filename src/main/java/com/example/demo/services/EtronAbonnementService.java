@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -269,15 +270,15 @@ public class EtronAbonnementService {
 	}
 	 
 	 // Connaitre tous les bornes qui se trouvent autour d'un utilisateur d'un rayon max de 5 KM
-	public ResponseEntity<List<BorneRecharge>> ListerBornesRechargeUser(double userLatitude , double userLongitude , double rayonDistanceMax ){
+	public ResponseEntity<List<BorneRecharge>> ListerBornesRechargeUser(Map<String,String >requestMap){
 		try {
 			List<BorneRecharge> bornes = bornerepos.findAll();
 			List<BorneRecharge> bornesProches = new ArrayList<BorneRecharge>();
 			
 			for (BorneRecharge borne : bornes) {
-			    double distance = calculerDistance(userLatitude, userLongitude, borne.getLatitude(), borne.getLongitude());
+			    double distance = calculerDistance(Double.parseDouble(requestMap.get("userLatitude")), Double.parseDouble(requestMap.get("userLongitude")), borne.getLatitude(), borne.getLongitude());
 			    
-			    if (distance <= rayonDistanceMax) {
+			    if (distance <= 5) {
 			        bornesProches.add(borne);
 			    }
 			}
@@ -405,7 +406,7 @@ public class EtronAbonnementService {
         LocalDate dateExpirationAbonnementGratuit = dateAchatEtron.plusYears(1);
 
         // Si la date actuelle est antérieure à la date d'expiration de l'abonnement gratuit, l'utilisateur est éligible.
-        return LocalDate.now().isBefore(dateExpirationAbonnementGratuit) && v.getModele() == voiturerepos.getDernierModele();
+        return LocalDate.now().isBefore(dateExpirationAbonnementGratuit) && user.getModeleVoiture() == voiturerepos.getDernierModele();
     }
     
     public double calculerDistance(double lat1, double lon1, double lat2, double lon2) {
@@ -478,7 +479,7 @@ public class EtronAbonnementService {
                     	AbonnementPlan abonnement = new AbonnementPlan();
                     	abonnement.setType(requestMap.get("type"));
                     	abonnement.setFraismois(Double.parseDouble(requestMap.get("fraismois")));
-                    	abonnement.setDureeContrat(12);
+                    	abonnement.setDureeContrat(1);
                     	abonnement.setFraisAC(Double.parseDouble(requestMap.get("fraisAC")));
                     	abonnement.setFraisDCHPC(Double.parseDouble(requestMap.get("fraisDCHPC")));
                     	abonnement.setFraisHautePuissance(Double.parseDouble(requestMap.get("fraisHautePuissance")));
@@ -513,6 +514,7 @@ public class EtronAbonnementService {
                 if (Objects.isNull(voiture)) {
                 	Voiture car = new Voiture();
                 	car.setModele(requestMap.get("modele"));
+                	car.setDateAjoutVoiture(LocalDate.now());
                 	voiturerepos.save(car);
                     return EtronPrjUtils.getResponseEntity("Car Successfully Registered", HttpStatus.OK);
                 } else {
@@ -559,5 +561,33 @@ public class EtronAbonnementService {
         }
         return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    
+    //Annuler Abonnement 
+    public ResponseEntity<String> annulerAbonnement(Map<String,String> requestMap) {
+        User client = userrepos.findById(Integer.parseInt(requestMap.get("userId")));
+        
+        if (client != null) {
+        	List<Contrat> contrats = contratrepos.getOldestContratByUser(client, PageRequest.of(0, 1));
+        	Contrat oldContrat = contrats.get(0);
+            LocalDate datePremierContrat = oldContrat.getDateDebut();
+            LocalDate dateActuelle = LocalDate.now();
+            
+            // Calcul de la durée en mois
+            long dureeEnMois = ChronoUnit.MONTHS.between(datePremierContrat, dateActuelle);
+            
+            if (dureeEnMois >= 12) {
+                // Le client peut annuler son abonnement
+            	oldContrat.setUser(null); // Annule l'abonnement
+            	contratrepos.save(oldContrat);
+                return EtronPrjUtils.getResponseEntity("Abonnements annulés avec succès", HttpStatus.OK);
+            } else {
+                // Le client ne peut pas annuler son abonnement
+                return EtronPrjUtils.getResponseEntity("Impossible d'annuler l'abonnement (moins de 12 mois d'ancienneté)", HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            return EtronPrjUtils.getResponseEntity("Client non trouvé", HttpStatus.NOT_FOUND);
+        }
+    }
+
 
 }

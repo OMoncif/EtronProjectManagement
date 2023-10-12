@@ -52,6 +52,8 @@ public class User implements Serializable {
 	private String password;
 	
 	private String role;
+	
+	private String modeleVoiture;
 
 /*	
 	@Column(name = "password")
@@ -201,6 +203,14 @@ public class User implements Serializable {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public String getModeleVoiture() {
+		return modeleVoiture;
+	}
+
+	public void setModeleVoiture(String modeleVoiture) {
+		this.modeleVoiture = modeleVoiture;
 	}
 	
 	

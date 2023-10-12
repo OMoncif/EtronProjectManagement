@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.constants.EtronPrjConstants;
 import com.example.demo.models.BorneRecharge;
+import com.example.demo.models.Contrat;
 import com.example.demo.models.Facture;
 import com.example.demo.services.EtronAbonnementService;
 import com.example.demo.utils.EtronPrjUtils;
@@ -101,10 +102,10 @@ public class EtronAbonnementController {
         return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG , HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@GetMapping(value="/getBornes")
-	public ResponseEntity<List<BorneRecharge>> ListerBornesRechargeUser(@RequestParam("userLatitude") double userLatitude ,@RequestParam("userLongitude") double userLongitude ,@RequestParam("rayonDistanceMax") double rayonDistanceMax){
+	@PostMapping(value="/getBornes")
+	public ResponseEntity<List<BorneRecharge>> ListerBornesRechargeUser(@RequestBody Map<String,String> requestMap){
 		try {
-			return etronabonnementService.ListerBornesRechargeUser(userLatitude, userLongitude, rayonDistanceMax);
+			return etronabonnementService.ListerBornesRechargeUser(requestMap);
 			
 		} catch(Exception e){
 			e.printStackTrace();
@@ -165,5 +166,18 @@ public class EtronAbonnementController {
         }
         return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG , HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
+	//annulerAbonnement
+	
+	@PostMapping(value="/annulerAbonnement")
+	public ResponseEntity<String> annulerAbonnement(@RequestBody Map<String,String> requestMap){
+		try {
+            return etronabonnementService.annulerAbonnement(requestMap);
+        }catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG , HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
 	
 }
