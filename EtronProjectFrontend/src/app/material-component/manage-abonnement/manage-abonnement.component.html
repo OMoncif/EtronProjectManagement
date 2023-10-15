@@ -1,0 +1,53 @@
+<main>
+    <div class="bottom-data">
+      <div class="orders">
+        <div class="header">
+          <i class='bx bx-receipt'></i>
+          <h3>Manage Plans</h3>
+          <i class='bx bx-filter'></i>
+          <i class='bx bx-search'></i>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Fraismois</th>
+              <th>DureeContrat</th>
+              <th>FraisAC</th>
+              <th>FraisDCHPC</th>
+              <th>FraisHautePuissance</th>
+              <th>FraisBlocageAC</th>
+              <th>FraisBlocageDC</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Use Angular *ngFor to loop through the data -->
+            <tr *ngFor="let element of dataSource.data">
+              <td>
+                <p>{{ element.type }}</p>
+              </td>
+              <td>{{ element.fraismois }}</td>
+              <td>{{ element.dureeContrat }}</td>
+              <td>{{ element.fraisAC }}</td>
+              <td>{{ element.fraisDCHPC }}</td>
+              <td>{{ element.fraisHautePuissance }}</td>
+              <td>{{ element.fraisBlocageAC }}</td>
+              <td>{{ element.fraisBlocageDC }}</td>
+              <td class="action-link">
+                <button class="btn btn-primary" style="padding: 3px;" (click)="handleEditAction(element)"> Edit </button>
+                <button class="btn btn-danger" style="margin-left: 5px; padding: 3px;" (click)="handleDeleteAction(element)"> Delete </button>
+                
+              </td>
+              
+              
+            </tr>
+            <!-- End of Angular loop -->
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+  <script src="../../assets/index.js"></script>
+  

@@ -1,0 +1,23 @@
+<mat-toolbar style="background-color: #1976D2;">
+    <mat-toolbar-row fxLayout="row">
+        <span style="color: white;">Confirmation</span>
+        <span class="spacer"></span>
+        <button class="mat-dialog-close" mat-icon-button mat-dialog-close style="color: white;">
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-dialog-content class="mat-typography">
+    <h6>Are you sure want to {{ details.message }}</h6>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-raised-button color="primary" (click)="handleChangeAction()" style="background-color: #1976D2; color: white;">
+        <mat-icon>check_circle</mat-icon> Yes
+    </button>
+
+    <button mat-raised-button color="warn" mat-dialog-close>
+        <mat-icon>cancel</mat-icon> No
+    </button>
+</mat-dialog-actions>

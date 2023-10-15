@@ -1,0 +1,43 @@
+<main>
+    <div class="bottom-data">
+        <div class="orders">
+            <div class="header">
+                <i class='bx bx-receipt'></i>
+                <h3>View Factures</h3>
+                <i class='bx bx-filter'></i>
+                <i class='bx bx-search'></i>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>DateFacturation</th>
+                        <th>MontantTotal</th>
+                        <th>Client</th>
+                        <th>Status</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Use Angular *ngFor to loop through the data -->
+                    <tr *ngFor="let element of dataSource.data">
+                        <td>
+                            <p>{{ element.dateFacturation }}</p>
+                        </td>
+                        <td>{{ element.montantTotal }}</td>
+
+                        <td>{{ element.contrat.user.email }}</td>
+                        <td><span [ngClass]="element.status === 'Impayée' ? 'status pending' : 'status process'"
+                                style="color: white;">
+                                {{ element.role }}
+                            </span>
+                        </td>
+
+                    </tr>
+                    <!-- End of Angular loop -->
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+<script src="../../assets/index.js"></script>

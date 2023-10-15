@@ -1,0 +1,39 @@
+<main>
+    <div class="bottom-data">
+      <div class="orders">
+        <div class="header">
+          <i class='bx bx-receipt'></i>
+          <h3>View Contrats</h3>
+          <i class='bx bx-filter'></i>
+          <i class='bx bx-search'></i>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>dateDebut</th>
+              <th>dateFin</th>
+              <th>FraisMois</th>
+              <th>Client</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Use Angular *ngFor to loop through the data -->
+            <tr *ngFor="let element of dataSource.data">
+              <td>
+                <p>{{ element.dateDebut }}</p>
+              </td>
+              <td>{{ element.dateFin }}</td>
+              <td>{{element.FraisMois}}</td>
+              <td>{{ element.user.email }}</td>
+              
+            </tr>
+            <!-- End of Angular loop -->
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+  <script src="../../assets/index.js"></script>
+  

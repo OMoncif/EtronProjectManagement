@@ -1,0 +1,232 @@
+<body>
+    <!-- <mat-card>
+        <b><h2 class="h3 pd-20">Dashboard</h2></b>
+    </mat-card>
+    <br>
+    <div class="row">
+        <div class="column">
+            <div class="card">
+                <div class="container">
+                    <h2 class="h4 pd-20">Total Category:</h2>
+                    <h1 class="total">{{data?.category}}</h1>
+                    <p><button class="button" style="background-color: #149f39;" [routerLink]="['/cafe/category']">View Category</button></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="card">
+                <div class="container">
+                    <h2 class="h4 pd-20">Total Product:</h2>
+                    <h1 class="total">{{data?.product}}</h1>
+                    <p><button class="button" style="background-color: #149f39;" [routerLink]="['/cafe/product']">View Prouct</button></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="column">
+            <div class="card">
+                <div class="container">
+                    <h2 class="h4 pd-20">Total Bill:</h2>
+                    <h1 class="total">{{data?.bill}}</h1>
+                    <p><button class="button" style="background-color: #149f39;" [routerLink]="['/cafe/bill']">View Bill</button></p>
+                </div>
+            </div>
+        </div>
+
+
+    </div> -->
+    <main>
+        <div class="header">
+            <div class="left">
+                <h1>Dashboard</h1>
+                <ul class="breadcrumb" style="background-color: #25252C;">
+                    <li><a href="#">
+                            Analytics 
+                        </a></li>
+                        <li>/</li>
+                    <li><a href="#" class="active">Shop</a></li>
+                </ul>
+            </div>
+            <a href="#" class="report">
+                <i style="color: white;" class='bx bx-cloud-download'></i>
+                <span style="color: white;">Download CSV</span>
+            </a>
+        </div>
+
+        <!-- Insights -->
+        <ul class="insights">
+            <li>
+                <i class='bx bx-calendar-check'></i>
+                <span class="info">
+                    <h3>
+                        {{data?.Paiement}}
+                    </h3>
+                    <p>Paiements Effectués</p>
+                </span>
+            </li>
+            <li><i class='bx bx-show-alt'></i>
+                <span class="info">
+                    <h3>
+                        {{data?.Abonnement}}
+                    </h3>
+                    <p>Abonnements Plans</p>
+                </span>
+            </li>
+            <li><i class='bx bx-line-chart'></i>
+                <span class="info">
+                    <h3>
+                        {{data?.BorneRecharge}}
+                    </h3>
+                    <p>Bornes de Recharge</p>
+                </span>
+            </li>
+            <li><i class='bx bx-dollar-circle'></i>
+                <span class="info">
+                    <h3>
+                        {{data?.Facture}}
+                    </h3>
+                    <p>Totale Factures</p>
+                </span>
+            </li>
+        </ul>
+        <!-- End of Insights -->
+
+        <div class="bottom-data">
+            <div class="orders">
+                <div class="header">
+                    <i class='bx bx-receipt'></i>
+                    <h3>Contrats Recents</h3>
+                    <i class='bx bx-filter'></i>
+                    <i class='bx bx-search'></i>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Order Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <p>John Doe</p>
+                            </td>
+                            <td>14-08-2023</td>
+                            <td><span class="status completed">Completed</span></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>John Doe</p>
+                            </td>
+                            <td>14-08-2023</td>
+                            <td><span class="status pending">Pending</span></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>John Doe</p>
+                            </td>
+                            <td>14-08-2023</td>
+                            <td><span class="status process">Processing</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Reminders -->
+            <div class="reminders">
+                <div class="header">
+                    <i class='bx bx-note'></i>
+                    <h3>Abonnements</h3>
+                    <i class='bx bx-filter'></i>
+                    <i class='bx bx-plus'></i>
+                </div>
+                <ul class="task-list">
+                    <li class="completed">
+                        <div class="task-title">
+                            <i class='bx bx-check-circle'></i>
+                            <p>Start Our Meeting</p>
+                        </div>
+                        <i class='bx bx-dots-vertical-rounded'></i>
+                    </li>
+                    <li class="completed">
+                        <div class="task-title">
+                            <i class='bx bx-check-circle'></i>
+                            <p>Analyse Our Site</p>
+                        </div>
+                        <i class='bx bx-dots-vertical-rounded'></i>
+                    </li>
+                    <li class="not-completed">
+                        <div class="task-title">
+                            <i class='bx bx-x-circle'></i>
+                            <p>Play Footbal</p>
+                        </div>
+                        <i class='bx bx-dots-vertical-rounded'></i>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- End of Reminders-->
+
+        </div>
+        <div class="bottom-data">
+            <div class="orders">
+                <div class="header">
+                    <i class='bx bx-receipt'></i>
+                    <h3>Users</h3>
+                    <i class='bx bx-filter'></i>
+                    <i class='bx bx-search'></i>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Order Date</th>
+                            <th>Status</th>
+                            <th>Adresse</th>
+                            <th>date Inscritpion</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <p>John Doe</p>
+                            </td>
+                            <td>14-08-2023</td>
+                            <td><span class="status completed">Completed</span></td>
+                            <td>Adresse1</td>
+                            <td>14-08-2023</td>
+                            <td>User</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>John Doe</p>
+                            </td>
+                            <td>14-08-2023</td>
+                            <td><span class="status pending">Pending</span></td>
+                            <td>Adresse1</td>
+                            <td>14-08-2023</td>
+                            <td>User</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>John Doe</p>
+                            </td>
+                            <td>14-08-2023</td>
+                            <td><span class="status process">Processing</span></td>
+                            <td>Adresse1</td>
+                            <td>14-08-2023</td>
+                            <td>User</td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+
+    </main>
+    <script src="../../assets/index.js"></script>
+</body>

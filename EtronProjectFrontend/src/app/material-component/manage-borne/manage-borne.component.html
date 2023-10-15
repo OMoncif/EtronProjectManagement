@@ -1,0 +1,46 @@
+<main>
+    <div class="bottom-data">
+      <div class="orders">
+        <div class="header">
+          <i class='bx bx-receipt'></i>
+          <h3>Manage Bornes</h3>
+          <i class='bx bx-filter'></i>
+          <i class='bx bx-search'></i>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Typecharge</th>
+              <th>Latitude</th>
+              <th>Longitude</th>
+              <th>Disponible</th>
+              
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Use Angular *ngFor to loop through the data -->
+            <tr *ngFor="let element of dataSource.data">
+              <td>
+                <p>{{ element.typecharge }}</p>
+              </td>
+              <td>{{ element.latitude }}</td>
+              <td>{{ element.longitude }}</td>
+              <td>{{ element.disponible }}</td>
+              
+              <td class="action-link">
+                <button class="btn btn-primary" style="padding: 3px;" (click)="handleEditAction(element)"> Edit </button>
+                <button class="btn btn-danger" style="margin-left: 5px; padding: 3px;" (click)="handleDeleteAction(element)"> Delete </button>
+                
+              </td>
+              
+              
+            </tr>
+            <!-- End of Angular loop -->
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+  <script src="../../assets/index.js"></script>
+  
