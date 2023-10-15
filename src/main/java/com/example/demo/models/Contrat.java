@@ -16,7 +16,7 @@ public class Contrat {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int idcontrat;
+	private int id;
 	
 	private LocalDate dateDebut;
     private LocalDate dateFin;
@@ -40,11 +40,11 @@ public class Contrat {
 	}
 
 	public int getIdcontrat() {
-		return idcontrat;
+		return id;
 	}
 
-	public void setIdcontrat(int idcontrat) {
-		this.idcontrat = idcontrat;
+	public void setIdcontrat(int id) {
+		this.id = id;
 	}
 
 	public LocalDate getDateDebut() {

@@ -10,4 +10,7 @@ public interface AbonnementPlanRepository extends JpaRepository<AbonnementPlan, 
 	
 	@Query("select a from AbonnementPlan a where a.type = :type")
 	public AbonnementPlan findByType(@Param("type") String type);
+	
+	@Query("select a from AbonnementPlan a where a.id = :idPlan")
+	AbonnementPlan findById(@Param("idPlan") int idPlan);
 }

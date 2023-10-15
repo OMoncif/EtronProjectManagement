@@ -72,9 +72,6 @@ public class User implements Serializable {
 	 @OneToOne(mappedBy = "user")
 	 private Voiture voiture;
 	 
-	 @OneToMany(mappedBy = "user")
-	 private List<EtatChargeBatterie> etatsChargeBatterie;
-	 
 	 @OneToMany(mappedBy="user")
 	 private List<BorneRecharge> bornes;
 	 
@@ -163,14 +160,6 @@ public class User implements Serializable {
 
 	public void setContactnumber(String contactnumber) {
 		this.contactnumber = contactnumber;
-	}
-
-	public List<EtatChargeBatterie> getEtatsChargeBatterie() {
-		return etatsChargeBatterie;
-	}
-
-	public void setEtatsChargeBatterie(List<EtatChargeBatterie> etatsChargeBatterie) {
-		this.etatsChargeBatterie = etatsChargeBatterie;
 	}
 
 	public List<BorneRecharge> getBornes() {

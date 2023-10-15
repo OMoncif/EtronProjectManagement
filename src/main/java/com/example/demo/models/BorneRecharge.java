@@ -13,7 +13,7 @@ public class BorneRecharge {
 	
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
-	private int idBorne;
+	private int id;
 	private String typecharge;
 	private double latitude;
 	private double longitude;
@@ -23,10 +23,10 @@ public class BorneRecharge {
     private User user;
     
 	public int getIdBorne() {
-		return idBorne;
+		return id;
 	}
 	public void setIdBorne(int idBorne) {
-		this.idBorne = idBorne;
+		this.id = idBorne;
 	}
 	public String getTypecharge() {
 		return typecharge;

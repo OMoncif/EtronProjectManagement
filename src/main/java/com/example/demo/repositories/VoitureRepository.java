@@ -16,4 +16,7 @@ public interface VoitureRepository extends JpaRepository<Voiture, Integer>{
 	
 	@Query("select v.modele from Voiture v where v.dateAjoutVoiture = (select max(v2.dateAjoutVoiture) from Voiture v2)")
 	public String getDernierModele();
+	
+	@Query("select v from Voiture v where v.id = :idVoiture")
+	Voiture findById(@Param("idVoiture") int idVoiture);
 }

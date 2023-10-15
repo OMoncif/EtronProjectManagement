@@ -15,7 +15,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Service
 public class JwtUtil {
 
-	private String secret = "EronProject";
+	private String secret = "btechdays";
 	
 	public String extractUsername(String token) {
 		return extractClaims(token, Claims::getSubject);

@@ -15,19 +15,20 @@ public class Facture {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int idfacture;
+	private int id;
 	private LocalDate dateFacturation;
     private double montantTotal;
+    private String status;
     
     @OneToOne
     private Contrat contrat;
 
 	public int getIdfacture() {
-		return idfacture;
+		return id;
 	}
 
-	public void setIdfacture(int idfacture) {
-		this.idfacture = idfacture;
+	public void setIdfacture(int id) {
+		this.id = id;
 	}
 
 	public LocalDate getDateFacturation() {
@@ -52,6 +53,14 @@ public class Facture {
 
 	public void setContrat(Contrat contrat) {
 		this.contrat = contrat;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
     
     

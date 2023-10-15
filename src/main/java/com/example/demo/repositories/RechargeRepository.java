@@ -14,6 +14,7 @@ public interface RechargeRepository extends JpaRepository<Recharge,Long> {
 	@Query("SELECT r FROM Recharge r WHERE r.user = :user AND MONTH(r.dateHeureRecharge) = :mois AND YEAR(r.dateHeureRecharge) = :annee")
 	public List<Recharge> findByUserAndMoisAndAnnee(@Param("user") User user , @Param("mois") int mois, @Param("annee") int annee);
 	
-	
+	@Query("select r from Recharge r where r.user.email = :email")
+	public List<Recharge> getRechargesByUser(@Param("email") String email);
 
 }

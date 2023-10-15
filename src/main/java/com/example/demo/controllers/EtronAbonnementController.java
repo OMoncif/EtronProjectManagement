@@ -10,13 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.constants.EtronPrjConstants;
 import com.example.demo.models.BorneRecharge;
-import com.example.demo.models.Contrat;
-import com.example.demo.models.Facture;
 import com.example.demo.services.EtronAbonnementService;
 import com.example.demo.utils.EtronPrjUtils;
 
@@ -113,6 +110,8 @@ public class EtronAbonnementController {
 		return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
+
+	
 	@PostMapping(value="/calculerFactureMensuelle")
 	public ResponseEntity<String> calculerFactureMensuelle(@RequestBody Map<String,String> requestMap){
 		try {
@@ -122,61 +121,6 @@ public class EtronAbonnementController {
 			e.printStackTrace();
 		}
 		return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
-	}
-	
-	@PostMapping(value="/AjoutVoiture")
-	public ResponseEntity<String> addVoiture(@RequestBody Map<String, String> requestMap){
-		try {
-            return etronabonnementService.addVoiture(requestMap);
-        }catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG , HttpStatus.INTERNAL_SERVER_ERROR);
-	}
-	
-	
-	
-	@PostMapping(value="/AjoutRecharge")
-	public ResponseEntity<String> AjoutRecharge(@RequestBody Map<String, String> requestMap){
-		try {
-            return etronabonnementService.addRecharge(requestMap);
-        }catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG , HttpStatus.INTERNAL_SERVER_ERROR);
-	}
-	
-	@PostMapping(value="/AjoutAbonnement")
-	public ResponseEntity<String> AjoutAbonnement(@RequestBody Map<String,String> requestMap){
-		try {
-            return etronabonnementService.addAbonnement(requestMap);
-        }catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG , HttpStatus.INTERNAL_SERVER_ERROR);
-	}
-	
-	//addBorneRecharge
-	@PostMapping(value="/addBorneRecharge")
-	public ResponseEntity<String> addBorneRecharge(@RequestBody Map<String,String> requestMap){
-		try {
-            return etronabonnementService.addBorneRecharge(requestMap);
-        }catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG , HttpStatus.INTERNAL_SERVER_ERROR);
-	}
-	
-	//annulerAbonnement
-	
-	@PostMapping(value="/annulerAbonnement")
-	public ResponseEntity<String> annulerAbonnement(@RequestBody Map<String,String> requestMap){
-		try {
-            return etronabonnementService.annulerAbonnement(requestMap);
-        }catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG , HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	

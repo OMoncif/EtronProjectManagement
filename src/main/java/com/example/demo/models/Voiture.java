@@ -13,7 +13,7 @@ public class Voiture {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int idVoiture;
+	private int id;
 	
 	private String modele;
 	
@@ -22,12 +22,14 @@ public class Voiture {
 	@OneToOne
 	private User user;
 
-	public int getIdVoiture() {
-		return idVoiture;
+	
+
+	public int getId() {
+		return id;
 	}
 
-	public void setIdVoiture(int idVoiture) {
-		this.idVoiture = idVoiture;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getModele() {

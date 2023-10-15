@@ -15,7 +15,7 @@ public class Paiement {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int idpaiment;
+	private int id;
 	
 	private LocalDate datePaiement;
     private double montant;
@@ -24,11 +24,11 @@ public class Paiement {
     private User user;
 
 	public int getIdpaiment() {
-		return idpaiment;
+		return id;
 	}
 
-	public void setIdpaiment(int idpaiment) {
-		this.idpaiment = idpaiment;
+	public void setIdpaiment(int id) {
+		this.id = id;
 	}
 
 	public LocalDate getDatePaiement() {

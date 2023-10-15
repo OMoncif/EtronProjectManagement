@@ -1,18 +1,14 @@
 package com.example.demo.services;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,7 +24,6 @@ import com.example.demo.models.Facture;
 import com.example.demo.models.Paiement;
 import com.example.demo.models.Recharge;
 import com.example.demo.models.User;
-import com.example.demo.models.Voiture;
 import com.example.demo.repositories.AbonnementPlanRepository;
 import com.example.demo.repositories.BorneRechargeRepository;
 import com.example.demo.repositories.ContratRepository;
@@ -42,7 +37,6 @@ import com.example.demo.utils.EtronPrjUtils;
 import com.google.common.base.Strings;
 import com.example.demo.JWT.CustomerUserDetailsService;
 import com.example.demo.JWT.JwtFilter;
-import com.example.demo.utils.EmailUtils;
 import com.example.demo.JWT.JwtUtil;
 
 
@@ -87,17 +81,6 @@ public class EtronAbonnementService {
 	@Autowired
 	private FactureRepository facturerepos;
 	
-	/*public ResponseEntity<String> inscrireUtilisateur(String nom, String prenom, String adresse, String numeroTelephone, String email) {
-        User user = new User();
-        user.setName(nom);
-        user.setPrenom(prenom);
-        user.setAdresse(adresse);
-        user.setContactnumber(numeroTelephone);
-        user.setEmail(email);
-        user.setDateInscription(LocalDate.now());
-
-        return userrepos.save(user);
-    }*/
 	
 	public ResponseEntity<String> inscrireUtilisateur(Map<String, String> requestMap) {
 		System.out.println("Request Map: " + requestMap);
@@ -139,6 +122,7 @@ public class EtronAbonnementService {
         user.setPassword(requestMap.get("password"));
         user.setAdresse(requestMap.get("adresse"));
         user.setDateInscription(LocalDate.now());
+        user.setModeleVoiture(requestMap.get("modeleVoiture"));
         user.setRole("user");
         return user;
     }
@@ -268,6 +252,25 @@ public class EtronAbonnementService {
 
 	        
 	}
+	
+	// Paiement facture impayée
+	public ResponseEntity<String> payerFacture(Map<String,String> requestMap) {
+		try {
+			User user = userrepos.findById(Integer.parseInt(requestMap.get("idUser")));
+			Facture facture = user.getContrat().getFacture();
+			
+			facture.setStatus("payée");
+			facturerepos.save(facture);
+
+	        return EtronPrjUtils.getResponseEntity("Paiement Successfully Registered", HttpStatus.OK); // Paiement réussi
+	        
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+        return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR); // Code invalide
+
+	        
+	}
 	 
 	 // Connaitre tous les bornes qui se trouvent autour d'un utilisateur d'un rayon max de 5 KM
 	public ResponseEntity<List<BorneRecharge>> ListerBornesRechargeUser(Map<String,String >requestMap){
@@ -319,6 +322,7 @@ public class EtronAbonnementService {
 		        facture.setContrat(user.getContrat());
 		        facture.setDateFacturation(dateDemandeFacture);
 		        facture.setMontantTotal(montantTotal);
+		        facture.setStatus("Impayée");
 		        
 		        facturerepos.save(facture);
 		        
@@ -399,9 +403,6 @@ public class EtronAbonnementService {
     // Méthode pour vérifier l'éligibilité à l'abonnement gratuit la première année
     public boolean estEligibleAbonnementGratuit(User user) {
     	
-        // Vérifiez si l'utilisateur est propriétaire de la nouvelle voiture e-tron.
-    	Voiture v = voiturerepos.findVoitureByUser(user);
-
         LocalDate dateAchatEtron = user.getDateInscription();
         LocalDate dateExpirationAbonnementGratuit = dateAchatEtron.plusYears(1);
 
@@ -431,163 +432,6 @@ public class EtronAbonnementService {
         return distance;
     }
     
-    //Ajout Recharge d'un User
-    public Recharge getRechargeById(long id){
-        return rechargerepos.findById(id).orElse(null);
-    }
-
-    public ResponseEntity<String> addRecharge(Map<String,String> requestMap){
-        System.out.println("Inside Ajout Recharge :" + requestMap);
-    	try {
-            if (requestMap.containsKey("quantiteEnergie") && requestMap.containsKey("typeCharge") && requestMap.containsKey("DureeRecharge")) {
-            	Recharge recharge = new Recharge();
-            	recharge.setQuantiteEnergie(Double.parseDouble(requestMap.get("quantiteEnergie")));
-            	recharge.setTypeCharge(requestMap.get("typeCharge"));
-            	
-            	/*DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-
-            	LocalDateTime parsedDate = LocalDateTime.parse(requestMap.get("dateHeureRecharge"), formatter);*/
-            	recharge.setDateHeureRecharge(LocalDateTime.now());
-            	
-            	recharge.setDureeRecharge(Integer.parseInt(requestMap.get("DureeRecharge")));
-            	rechargerepos.save(recharge);
-                return EtronPrjUtils.getResponseEntity("Recharge Successfully Registered", HttpStatus.OK);
-                	
-                
-            } else {
-                return EtronPrjUtils.getResponseEntity(EtronPrjConstants.INVALID_DATA, HttpStatus.BAD_REQUEST);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     
-    public List<Recharge> getRechargeByUserAndMoisAndAnnee(int idUser , int mois, int annee){
-    	User user = userrepos.findById(idUser);
-    	return rechargerepos.findByUserAndMoisAndAnnee(user, mois, annee);
-    }
-    
-    //Ajout Un Abonnement 
-    public ResponseEntity<String> addAbonnement(Map<String,String> requestMap){        
-        System.out.println("Inside Ajout Abonnement:" + requestMap);
-    	try {
-    		if(jwtFilter.isAdmin()) {
-    			if (requestMap.containsKey("type") && requestMap.containsKey("fraismois") && requestMap.containsKey("fraisAC") && requestMap.containsKey("fraisDCHPC") && requestMap.containsKey("fraisHautePuissance") && requestMap.containsKey("fraisBlocageAC") && requestMap.containsKey("fraisBlocageDC") && requestMap.containsKey("blocageACHeureCreuse")) {
-                    AbonnementPlan plan  = planrepos.findByType(requestMap.get("type"));
-                    if (Objects.isNull(plan)) {
-                    	AbonnementPlan abonnement = new AbonnementPlan();
-                    	abonnement.setType(requestMap.get("type"));
-                    	abonnement.setFraismois(Double.parseDouble(requestMap.get("fraismois")));
-                    	abonnement.setDureeContrat(1);
-                    	abonnement.setFraisAC(Double.parseDouble(requestMap.get("fraisAC")));
-                    	abonnement.setFraisDCHPC(Double.parseDouble(requestMap.get("fraisDCHPC")));
-                    	abonnement.setFraisHautePuissance(Double.parseDouble(requestMap.get("fraisHautePuissance")));
-                    	abonnement.setFraisBlocageAC(Double.parseDouble(requestMap.get("fraisBlocageAC")));
-                    	abonnement.setFraisBlocageDC(Double.parseDouble(requestMap.get("fraisBlocageDC")));
-                    	abonnement.setBlocageACHeureCreuse(Boolean.parseBoolean(requestMap.get("blocageACHeureCreuse")));
-                    	
-                    	planrepos.save(abonnement);
-                        return EtronPrjUtils.getResponseEntity("Abonnement Successfully Registered", HttpStatus.OK);
-                    } else {
-                        return EtronPrjUtils.getResponseEntity("Model already exists", HttpStatus.BAD_REQUEST);
-                    }
-                } else {
-                    return EtronPrjUtils.getResponseEntity(EtronPrjConstants.INVALID_DATA, HttpStatus.BAD_REQUEST);
-                }
-    		} else {
-    			return EtronPrjUtils.getResponseEntity(EtronPrjConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED);
-    		}
-            
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-    
-    //Ajout de Voiture AUDI
-    public ResponseEntity<String> addVoiture(Map<String, String> requestMap){
-        System.out.println("Inside Ajout Voiture:" + requestMap);
-    	try {
-            if (requestMap.containsKey("modele")) {
-                Voiture voiture = voiturerepos.findByModele(requestMap.get("modele"));
-                if (Objects.isNull(voiture)) {
-                	Voiture car = new Voiture();
-                	car.setModele(requestMap.get("modele"));
-                	car.setDateAjoutVoiture(LocalDate.now());
-                	voiturerepos.save(car);
-                    return EtronPrjUtils.getResponseEntity("Car Successfully Registered", HttpStatus.OK);
-                } else {
-                    return EtronPrjUtils.getResponseEntity("Model already exists", HttpStatus.BAD_REQUEST);
-                }
-            } else {
-                return EtronPrjUtils.getResponseEntity(EtronPrjConstants.INVALID_DATA, HttpStatus.BAD_REQUEST);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-    
-    public boolean getTimeNow() {
-    	System.out.println("time now : "  + LocalTime.now());
-    	return LocalTime.now().isBefore(LocalTime.of(21, 0)) || LocalTime.now().isAfter(LocalTime.of(9, 0));
-    }
-    
-    //BorneRecharge
-    public ResponseEntity<String> addBorneRecharge(Map<String,String> requestMap){
-        System.out.println("Inside Ajout BorneRecharge :" + requestMap);
-    	try {
-            if (requestMap.containsKey("typecharge") && requestMap.containsKey("latitude") && requestMap.containsKey("longitude") && requestMap.containsKey("disponible")) {
-            	BorneRecharge bornerecharge = bornerepos.getBorneByLongitudeAndLatitude(Double.parseDouble(requestMap.get("latitude")),Double.parseDouble(requestMap.get("longitude")));
-            	if(Objects.isNull(bornerecharge)) {
-            		BorneRecharge borne = new BorneRecharge();
-                	borne.setTypecharge(requestMap.get("typecharge"));
-                	borne.setDisponible(Boolean.parseBoolean(requestMap.get("disponible")));
-                	borne.setLatitude(Double.parseDouble(requestMap.get("latitude")));
-                	borne.setLongitude(Double.parseDouble(requestMap.get("longitude")));
-
-                	bornerepos.save(borne);
-                    return EtronPrjUtils.getResponseEntity("BornRecharge Successfully Registered", HttpStatus.OK);
-            	} else {
-            		return EtronPrjUtils.getResponseEntity("Borne already exists", HttpStatus.BAD_REQUEST);
-            	}
-                
-            } else {
-                return EtronPrjUtils.getResponseEntity(EtronPrjConstants.INVALID_DATA, HttpStatus.BAD_REQUEST);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-    
-    //Annuler Abonnement 
-    public ResponseEntity<String> annulerAbonnement(Map<String,String> requestMap) {
-        User client = userrepos.findById(Integer.parseInt(requestMap.get("userId")));
-        
-        if (client != null) {
-        	List<Contrat> contrats = contratrepos.getOldestContratByUser(client, PageRequest.of(0, 1));
-        	Contrat oldContrat = contrats.get(0);
-            LocalDate datePremierContrat = oldContrat.getDateDebut();
-            LocalDate dateActuelle = LocalDate.now();
-            
-            // Calcul de la durée en mois
-            long dureeEnMois = ChronoUnit.MONTHS.between(datePremierContrat, dateActuelle);
-            
-            if (dureeEnMois >= 12) {
-                // Le client peut annuler son abonnement
-            	oldContrat.setUser(null); // Annule l'abonnement
-            	contratrepos.save(oldContrat);
-                return EtronPrjUtils.getResponseEntity("Abonnements annulés avec succès", HttpStatus.OK);
-            } else {
-                // Le client ne peut pas annuler son abonnement
-                return EtronPrjUtils.getResponseEntity("Impossible d'annuler l'abonnement (moins de 12 mois d'ancienneté)", HttpStatus.BAD_REQUEST);
-            }
-        } else {
-            return EtronPrjUtils.getResponseEntity("Client non trouvé", HttpStatus.NOT_FOUND);
-        }
-    }
-
 
 }

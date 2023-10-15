@@ -25,7 +25,6 @@ public class AbonnementPlan {
     private double fraisHautePuissance;
     private double fraisBlocageAC;
     private double fraisBlocageDC;
-    private boolean blocageACHeureCreuse;
     
     
     @OneToMany(mappedBy = "plan")
@@ -84,12 +83,6 @@ public class AbonnementPlan {
 	}
 	public void setFraisBlocageDC(double fraisBlocageDC) {
 		this.fraisBlocageDC = fraisBlocageDC;
-	}
-	public boolean isBlocageACHeureCreuse() {
-		return blocageACHeureCreuse;
-	}
-	public void setBlocageACHeureCreuse(boolean blocageACHeureCreuse) {
-		this.blocageACHeureCreuse = blocageACHeureCreuse;
 	}
 	public List<Contrat> getContrats() {
 		return contrats;

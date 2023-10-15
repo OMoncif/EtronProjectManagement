@@ -10,5 +10,8 @@ public interface BorneRechargeRepository extends JpaRepository<BorneRecharge, In
 	
 	@Query("SELECT b FROM BorneRecharge b WHERE b.latitude = :latitude AND b.longitude = :longitude")
     BorneRecharge getBorneByLongitudeAndLatitude(@Param("latitude") double latitude, @Param("longitude") double longitude);
+	
+	@Query("select b from BorneRecharge b where b.id = :idBorne")
+	BorneRecharge findById(@Param("idBorne") int idBorne);
 
 }
