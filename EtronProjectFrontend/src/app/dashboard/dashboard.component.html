@@ -1,41 +1,5 @@
 <body>
-    <!-- <mat-card>
-        <b><h2 class="h3 pd-20">Dashboard</h2></b>
-    </mat-card>
-    <br>
-    <div class="row">
-        <div class="column">
-            <div class="card">
-                <div class="container">
-                    <h2 class="h4 pd-20">Total Category:</h2>
-                    <h1 class="total">{{data?.category}}</h1>
-                    <p><button class="button" style="background-color: #149f39;" [routerLink]="['/cafe/category']">View Category</button></p>
-                </div>
-            </div>
-        </div>
-
-        <div class="column">
-            <div class="card">
-                <div class="container">
-                    <h2 class="h4 pd-20">Total Product:</h2>
-                    <h1 class="total">{{data?.product}}</h1>
-                    <p><button class="button" style="background-color: #149f39;" [routerLink]="['/cafe/product']">View Prouct</button></p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="column">
-            <div class="card">
-                <div class="container">
-                    <h2 class="h4 pd-20">Total Bill:</h2>
-                    <h1 class="total">{{data?.bill}}</h1>
-                    <p><button class="button" style="background-color: #149f39;" [routerLink]="['/cafe/bill']">View Bill</button></p>
-                </div>
-            </div>
-        </div>
-
-
-    </div> -->
+    
     <main>
         <div class="header">
             <div class="left">
@@ -45,13 +9,13 @@
                             Analytics 
                         </a></li>
                         <li>/</li>
-                    <li><a href="#" class="active">Shop</a></li>
+                    <li><a href="#" class="active">System</a></li>
                 </ul>
             </div>
-            <a href="#" class="report">
+            <!-- <a href="#" class="report">
                 <i style="color: white;" class='bx bx-cloud-download'></i>
                 <span style="color: white;">Download CSV</span>
-            </a>
+            </a> -->
         </div>
 
         <!-- Insights -->
@@ -104,32 +68,18 @@
                     <thead>
                         <tr>
                             <th>User</th>
-                            <th>Order Date</th>
-                            <th>Status</th>
+                            <th>Plan</th>
+                            <th>FraisMois</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>
-                                <p>John Doe</p>
-                            </td>
-                            <td>14-08-2023</td>
-                            <td><span class="status completed">Completed</span></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <p>John Doe</p>
-                            </td>
-                            <td>14-08-2023</td>
-                            <td><span class="status pending">Pending</span></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <p>John Doe</p>
-                            </td>
-                            <td>14-08-2023</td>
-                            <td><span class="status process">Processing</span></td>
-                        </tr>
+                        <tr *ngFor="let element of dataSource.data">
+                            
+                            
+                            <td>{{ element.userEmail }}</td>
+                            <td>{{element.abonnementPlanType}}</td>
+                            <td>{{element.fraisMois}}</td>
+                          </tr>
                     </tbody>
                 </table>
             </div>
@@ -139,18 +89,25 @@
                 <div class="header">
                     <i class='bx bx-note'></i>
                     <h3>Abonnements</h3>
-                    <i class='bx bx-filter'></i>
-                    <i class='bx bx-plus'></i>
+                    <a (click)="handleAddAction()"> <i class='bx bx-plus'></i> </a>
+
                 </div>
-                <ul class="task-list">
+                <ul class="task-list" *ngFor="let element of dataSource1.data">
                     <li class="completed">
                         <div class="task-title">
-                            <i class='bx bx-check-circle'></i>
-                            <p>Start Our Meeting</p>
+                            <!-- <i class='bx bx-check-circle'></i> -->
+                            <p>{{element.type}}</p>
                         </div>
-                        <i class='bx bx-dots-vertical-rounded'></i>
+                        <div class="task-title">
+                            <!-- <i class='bx bx-check-circle'></i> -->
+                            <p>{{element.fraismois}}$</p>
+                        </div>
+                        <div>
+                            <p><button class="btn btn-primary" style="padding: 3px;" (click)="handleEditAction(element)"> Edit </button>
+                                <button class="btn btn-danger" style="margin-left: 5px; padding: 3px;" (click)="handleDeleteAction(element)"> Delete </button></p>
+                        </div>
                     </li>
-                    <li class="completed">
+                    <!-- <li class="completed">
                         <div class="task-title">
                             <i class='bx bx-check-circle'></i>
                             <p>Analyse Our Site</p>
@@ -163,7 +120,7 @@
                             <p>Play Footbal</p>
                         </div>
                         <i class='bx bx-dots-vertical-rounded'></i>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
 
@@ -175,54 +132,47 @@
                 <div class="header">
                     <i class='bx bx-receipt'></i>
                     <h3>Users</h3>
-                    <i class='bx bx-filter'></i>
-                    <i class='bx bx-search'></i>
+                    <a (click)="handleAddUserAction()"> <i class='bx bx-plus'></i> </a>
                 </div>
                 <table>
                     <thead>
-                        <tr>
-                            <th>User</th>
-                            <th>Order Date</th>
-                            <th>Status</th>
-                            <th>Adresse</th>
-                            <th>date Inscritpion</th>
-                            <th>Role</th>
-                        </tr>
+                      <tr>
+                        <th>User</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Adresse</th>
+                        <th>Inscription</th>
+                        <th>Voiture</th>
+                        <th>Actions</th>
+                      </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>
-                                <p>John Doe</p>
-                            </td>
-                            <td>14-08-2023</td>
-                            <td><span class="status completed">Completed</span></td>
-                            <td>Adresse1</td>
-                            <td>14-08-2023</td>
-                            <td>User</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <p>John Doe</p>
-                            </td>
-                            <td>14-08-2023</td>
-                            <td><span class="status pending">Pending</span></td>
-                            <td>Adresse1</td>
-                            <td>14-08-2023</td>
-                            <td>User</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <p>John Doe</p>
-                            </td>
-                            <td>14-08-2023</td>
-                            <td><span class="status process">Processing</span></td>
-                            <td>Adresse1</td>
-                            <td>14-08-2023</td>
-                            <td>User</td>
-                        </tr>
+                      <!-- Use Angular *ngFor to loop through the data -->
+                      <tr *ngFor="let element of dataSource2.data">
+                        <td>
+                          <p>{{ element.name }}</p>
+                        </td>
+                        <td>{{ element.email }}</td>
+                        <td>
+                          <span [ngClass]="element.role === 'admin' ? 'status process' : 'status completed'" style="color: white;">
+                              {{ element.role }}
+                           </span>
+                        </td>
+                        <td>{{ element.adresse }}</td>
+                        <td>{{ element.dateInscription }}</td>
+                        <td>{{ element.modeleVoiture }}</td>
+                        <td class="action-link">
+                          <button class="btn btn-primary" style="padding: 3px;" (click)="handleEditUserAction(element)"> Edit </button>
+                          <button class="btn btn-danger" style="margin-left: 5px; padding: 3px;" (click)="handleDeleteUserAction(element)"> Delete </button>
+                          
+                        </td>
                         
+                        
+                      </tr>
+                      <!-- End of Angular loop -->
+                      
                     </tbody>
-                </table>
+                  </table>
             </div>
         </div>
         

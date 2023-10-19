@@ -53,6 +53,21 @@ export class ManageBorneComponent {
     );
   }
 
+  handleAddAction() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      action: 'Add'
+    };
+    dialogConfig.width = "850px";
+    const dialogRef = this.dialog.open(BorneComponent,dialogConfig);
+    this.router.events.subscribe(()=>{
+      dialogRef.close();
+    });
+    const sub = dialogRef.componentInstance.onAddBorne.subscribe((response)=>{
+      this.tableData();
+    })
+  }
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();

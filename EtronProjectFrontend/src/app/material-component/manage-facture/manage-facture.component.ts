@@ -12,7 +12,7 @@ import { GlobalConstants } from 'src/app/shared/global-constants';
 })
 export class ManageFactureComponent {
 
-  displayedColumns: string[] = ['dateFacturation', 'montantTotal', 'status','contrat'];
+  displayedColumns: string[] = ['dateFacturation', 'montantTotal', 'status','userEmail'];
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]); // Initialize with an empty array
   responseMessage: any;
 

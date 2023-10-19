@@ -14,7 +14,7 @@ import { PaiementService } from 'src/app/services/paiement.service';
 })
 export class ManagePaiementComponent {
 
-  displayedColumns: string[] = ['datePaiement', 'montant', 'user'];
+  displayedColumns: string[] = ['datePaiement', 'montant', 'userEmail'];
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]); // Initialize with an empty array
   responseMessage: any;
 

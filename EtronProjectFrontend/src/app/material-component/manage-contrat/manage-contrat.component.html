@@ -14,6 +14,7 @@
               <th>dateFin</th>
               <th>FraisMois</th>
               <th>Client</th>
+              <th>Plan</th>
 
             </tr>
           </thead>
@@ -24,8 +25,9 @@
                 <p>{{ element.dateDebut }}</p>
               </td>
               <td>{{ element.dateFin }}</td>
-              <td>{{element.FraisMois}}</td>
-              <td>{{ element.user.email }}</td>
+              <td>{{element.fraisMois}}</td>
+              <td>{{ element.userEmail }}</td>
+              <td>{{element.abonnementPlanType}}</td>
               
             </tr>
             <!-- End of Angular loop -->

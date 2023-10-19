@@ -1,27 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { UserService } from 'src/app/services/user.service';
 import { GlobalConstants } from 'src/app/shared/global-constants';
-import { UserComponent } from '../dialog/user/user.component';
-import { Router } from '@angular/router';
 import { ConfirmationComponent } from '../dialog/confirmation/confirmation.component';
+import { UserComponent } from '../dialog/user/user.component';
+import { RechargeService} from 'src/app/services/recharge.service';
+import { RechargeComponent } from '../dialog/recharge/recharge.component';
 
 @Component({
-  selector: 'app-manage-user',
-  templateUrl: './manage-user.component.html',
-  styleUrls: ['./manage-user.component.scss', '../../../assets/style.css']
+  selector: 'app-manage-recharge',
+  templateUrl: './manage-recharge.component.html',
+  styleUrls: ['./manage-recharge.component.scss']
 })
-export class ManageUserComponent implements OnInit {
-  displayedColumns: string[] = ['name', 'email', 'role', 'adresse', 'dateInscription', 'modeleVoiture'];
+export class ManageRechargeComponent {
+
+  displayedColumns: string[] = ['typeCharge', 'quantiteEnergie', 'dateHeureRecharge', 'dureeRecharge'];
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]); // Initialize with an empty array
   responseMessage: any;
 
   constructor(
     private ngxService: NgxUiLoaderService,
-    private userService: UserService,
+    private rechargeService: RechargeService,
     private snackbarService: SnackbarService,
     private dialog: MatDialog,
     private router: Router
@@ -33,7 +35,7 @@ export class ManageUserComponent implements OnInit {
   }
 
   tableData() {
-    this.userService.getUsers().subscribe(
+    this.rechargeService.getRecharges().subscribe(
       (response: any) => {
         this.ngxService.stop();
         console.log('API Response:', response);
@@ -57,59 +59,25 @@ export class ManageUserComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  handleEditAction(values: any) {
+  handleAddAction() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
-      action: 'Edit',
-      data: values
+      action: 'Add'
     };
-    dialogConfig.width = '850px';
-    const dialogRef = this.dialog.open(UserComponent, dialogConfig);
-    this.router.events.subscribe(() => {
+    dialogConfig.width = "850px";
+    const dialogRef = this.dialog.open(RechargeComponent,dialogConfig);
+    this.router.events.subscribe(()=>{
       dialogRef.close();
     });
-
-    dialogRef.componentInstance?.onEditUser.subscribe((response) => {
+    const sub = dialogRef.componentInstance.onAddRecharge.subscribe((response)=>{
       this.tableData();
-    });
-  }
-
-  handleDeleteAction(values: any) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = {
-      message: 'delete ' + values.name + ' User',
-      confirmation: true
-    };
-    const dialogRef = this.dialog.open(ConfirmationComponent, dialogConfig);
-    dialogRef.componentInstance?.onEmitStatusChange.subscribe((response) => {
-      this.ngxService.start();
-      this.delete(values.id);
-      dialogRef.close();
-    });
-  }
-  delete(id: any) {
-    this.userService.delete(id).subscribe(
-      (response: any) => {
-        this.ngxService.stop();
-        this.tableData();
-        this.responseMessage = response?.message;
-        this.snackbarService.openSnackBar(this.responseMessage, 'success');
-      },
-      (error: any) => {
-        this.ngxService.stop();
-        console.log(error);
-        if (error.error?.message) {
-          this.responseMessage = error.error?.message;
-        } else {
-          this.responseMessage = GlobalConstants.genericError;
-        }
-        this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
-      }
-    );
+    })
   }
 
   
-  onChange(event: Event, id: any) {
+
+  
+  /*onChange(event: Event, id: any) {
     this.ngxService.start();
     const target = event.target as HTMLInputElement | null;
 
@@ -120,7 +88,7 @@ export class ManageUserComponent implements OnInit {
         id: id
       };
 
-      this.userService.update(data).subscribe(
+      this.rechargeService.add(data).subscribe(
         (response: any) => {
           this.ngxService.stop();
           this.responseMessage = response?.message;
@@ -138,20 +106,5 @@ export class ManageUserComponent implements OnInit {
         }
       );
     }
-  }
-
-  handleAddAction() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = {
-      action: 'Add'
-    };
-    dialogConfig.width = "850px";
-    const dialogRef = this.dialog.open(UserComponent,dialogConfig);
-    this.router.events.subscribe(()=>{
-      dialogRef.close();
-    });
-    const sub = dialogRef.componentInstance.onAddUser.subscribe((response)=>{
-      this.tableData();
-    })
-  }
+  }*/
 }

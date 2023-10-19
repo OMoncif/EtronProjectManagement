@@ -3,27 +3,32 @@
       <div class="orders">
         <div class="header">
           <i class='bx bx-receipt'></i>
-          <h3>View Paiements</h3>
-          <i class='bx bx-filter'></i>
-          <i class='bx bx-search'></i>
+          <h3>Manage Users</h3>
+          <!-- <i class='bx bx-filter'></i>
+          <i class='bx bx-search'></i> -->
+          <a (click)="handleAddAction()"> <i class='bx bx-plus'></i> </a>
         </div>
         <table>
           <thead>
             <tr>
-              <th>DatePaiement</th>
-              <th>Montant</th>
-              <th>Client</th>
-
+              <th>TypeCharge</th>
+              <th>QuantiteEnergie</th>
+              <th>DateHeureRecharge</th>
+              <th>DureeRecharge</th>
             </tr>
           </thead>
           <tbody>
             <!-- Use Angular *ngFor to loop through the data -->
             <tr *ngFor="let element of dataSource.data">
               <td>
-                <p>{{ element.datePaiement }}</p>
+                <p>{{ element.typeCharge }}</p>
               </td>
-              <td>{{ element.montant }}</td>
-              <td>{{ element.userEmail }}</td>
+              <td>{{ element.quantiteEnergie }}</td>
+              
+              <td>{{ element.dateHeureRecharge }}</td>
+              <td>{{ element.dureeRecharge }}</td>
+              
+              
               
             </tr>
             <!-- End of Angular loop -->

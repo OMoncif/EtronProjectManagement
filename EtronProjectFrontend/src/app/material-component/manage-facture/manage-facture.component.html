@@ -25,10 +25,10 @@
                         </td>
                         <td>{{ element.montantTotal }}</td>
 
-                        <td>{{ element.contrat.user.email }}</td>
+                        <td>{{ element.userEmail }}</td>
                         <td><span [ngClass]="element.status === 'Impayée' ? 'status pending' : 'status process'"
                                 style="color: white;">
-                                {{ element.role }}
+                                {{ element.status }}
                             </span>
                         </td>
 

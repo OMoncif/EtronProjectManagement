@@ -12,7 +12,7 @@ import { GlobalConstants } from 'src/app/shared/global-constants';
 })
 export class ManageContratComponent {
 
-  displayedColumns: string[] = ['dateDebut', 'dateFin', 'FraisMois','user'];
+  displayedColumns: string[] = ['dateDebut', 'dateFin', 'fraisMois','userEmail','abonnementPlanType'];
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]); // Initialize with an empty array
   responseMessage: any;
 

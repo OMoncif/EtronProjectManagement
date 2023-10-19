@@ -53,6 +53,21 @@ export class ManageAbonnementComponent {
     );
   }
 
+  handleAddAction() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      action: 'Add'
+    };
+    dialogConfig.width = "850px";
+    const dialogRef = this.dialog.open(AbonnementComponent,dialogConfig);
+    this.router.events.subscribe(()=>{
+      dialogRef.close();
+    });
+    const sub = dialogRef.componentInstance.onAddAbonnement.subscribe((response)=>{
+      this.tableData();
+    })
+  }
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();

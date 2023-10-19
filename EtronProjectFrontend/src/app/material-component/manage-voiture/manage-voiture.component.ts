@@ -53,6 +53,21 @@ export class ManageVoitureComponent {
     );
   }
 
+  handleAddAction() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      action: 'Add'
+    };
+    dialogConfig.width = "850px";
+    const dialogRef = this.dialog.open(VoitureComponent,dialogConfig);
+    this.router.events.subscribe(()=>{
+      dialogRef.close();
+    });
+    const sub = dialogRef.componentInstance.onAddVoiture.subscribe((response)=>{
+      this.tableData();
+    })
+  }
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();

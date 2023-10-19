@@ -30,6 +30,7 @@ import { ManageBorneComponent } from './manage-borne/manage-borne.component';
 import { ManagePaiementComponent } from './manage-paiement/manage-paiement.component';
 import { ManageFactureComponent } from './manage-facture/manage-facture.component';
 import { ManageContratComponent } from './manage-contrat/manage-contrat.component';
+import { ManageRechargeComponent } from './manage-recharge/manage-recharge.component';
 
 @NgModule({
   imports: [
@@ -64,7 +65,8 @@ import { ManageContratComponent } from './manage-contrat/manage-contrat.componen
     ManageBorneComponent,
     ManagePaiementComponent,
     ManageFactureComponent,
-    ManageContratComponent
+    ManageContratComponent,
+    ManageRechargeComponent
   ]
 })
 export class MaterialComponentsModule {}
