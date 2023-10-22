@@ -14,6 +14,7 @@ import { ManageBorneComponent } from './manage-borne/manage-borne.component';
 import { ManageVoitureComponent } from './manage-voiture/manage-voiture.component';
 import { ManageRechargeComponent } from './manage-recharge/manage-recharge.component';
 import { ChoisirAbonnementComponent } from './choisir-abonnement/choisir-abonnement.component';
+import { ListerBorneComponent } from './lister-borne/lister-borne.component';
 
 
 export const MaterialRoutes: Routes = [
@@ -117,6 +118,14 @@ export const MaterialRoutes: Routes = [
     {
         path:'choisirabonnement',
         component:ChoisirAbonnementComponent,
+        canActivate:[RouteGuardService],
+        data: {
+            expectedRole: ['user']
+        }
+    },
+    {
+        path:'bornesproches',
+        component:ListerBorneComponent,
         canActivate:[RouteGuardService],
         data: {
             expectedRole: ['user']

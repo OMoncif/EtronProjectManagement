@@ -22,8 +22,8 @@
                 <mat-form-field appearance="outline" fxFlex>
                     <mat-label>prenom</mat-label>
                     <input matInput formControlName="prenom" required>
-                    <mat-error *ngIf="userForm.controls.name.touched && userForm.controls.name.invalid">
-                        <span *ngIf="userForm.controls.name.errors.required">This field is mandatory.</span>
+                    <mat-error *ngIf="userForm.controls.prenom.touched && userForm.controls.prenom.invalid">
+                        <span *ngIf="userForm.controls.prenom.errors.required">This field is mandatory.</span>
                     </mat-error>
                 </mat-form-field>
             </div>
@@ -31,8 +31,8 @@
                 <mat-form-field appearance="outline" fxFlex>
                     <mat-label>adresse</mat-label>
                     <input matInput formControlName="adresse" required>
-                    <mat-error *ngIf="userForm.controls.name.touched && userForm.controls.name.invalid">
-                        <span *ngIf="userForm.controls.name.errors.required">This field is mandatory.</span>
+                    <mat-error *ngIf="userForm.controls.adresse.touched && userForm.controls.adresse.invalid">
+                        <span *ngIf="userForm.controls.adresse.errors.required">This field is mandatory.</span>
                     </mat-error>
                 </mat-form-field>
             </div>
@@ -40,8 +40,8 @@
                 <mat-form-field appearance="outline" fxFlex>
                     <mat-label>contactnumber</mat-label>
                     <input matInput formControlName="contactnumber" required>
-                    <mat-error *ngIf="userForm.controls.name.touched && userForm.controls.name.invalid">
-                        <span *ngIf="userForm.controls.name.errors.required">This field is mandatory.</span>
+                    <mat-error *ngIf="userForm.controls.contactnumber.touched && userForm.controls.contactnumber.invalid">
+                        <span *ngIf="userForm.controls.contactnumber.errors.required">This field is mandatory.</span>
                     </mat-error>
                 </mat-form-field>
             </div>
@@ -49,8 +49,9 @@
                 <mat-form-field appearance="outline" fxFlex>
                     <mat-label>email</mat-label>
                     <input matInput formControlName="email" required>
-                    <mat-error *ngIf="userForm.controls.name.touched && userForm.controls.name.invalid">
-                        <span *ngIf="userForm.controls.name.errors.required">This field is mandatory.</span>
+                    <mat-error *ngIf="userForm.controls.email.touched && userForm.controls.email.invalid">
+                        <span *ngIf="userForm.controls.email.errors.required">This field is mandatory.</span>
+                        <span *ngIf="userForm.controls.email.errors.pattern">This field is invalid.</span>
                     </mat-error>
                 </mat-form-field>
             </div>
@@ -58,8 +59,8 @@
                 <mat-form-field appearance="outline" fxFlex>
                     <mat-label>password</mat-label>
                     <input matInput formControlName="password" required>
-                    <mat-error *ngIf="userForm.controls.name.touched && userForm.controls.name.invalid">
-                        <span *ngIf="userForm.controls.name.errors.required">This field is mandatory.</span>
+                    <mat-error *ngIf="userForm.controls.password.touched && userForm.controls.password.invalid">
+                        <span *ngIf="userForm.controls.password.errors.required">This field is mandatory.</span>
                     </mat-error>
                 </mat-form-field>
             </div>
@@ -67,8 +68,8 @@
                 <mat-form-field appearance="outline" fxFlex>
                     <mat-label>role</mat-label>
                     <input matInput formControlName="role" required>
-                    <mat-error *ngIf="userForm.controls.name.touched && userForm.controls.name.invalid">
-                        <span *ngIf="userForm.controls.name.errors.required">This field is mandatory.</span>
+                    <mat-error *ngIf="userForm.controls.role.touched && userForm.controls.role.invalid">
+                        <span *ngIf="userForm.controls.role.errors.required">This field is mandatory.</span>
                     </mat-error>
                 </mat-form-field>
             </div>
@@ -76,8 +77,8 @@
                 <mat-form-field appearance="outline" fxFlex>
                     <mat-label>modeleVoiture</mat-label>
                     <input matInput formControlName="modeleVoiture" required>
-                    <mat-error *ngIf="userForm.controls.name.touched && userForm.controls.name.invalid">
-                        <span *ngIf="userForm.controls.name.errors.required">This field is mandatory.</span>
+                    <mat-error *ngIf="userForm.controls.modeleVoiture.touched && userForm.controls.modeleVoiture.invalid">
+                        <span *ngIf="userForm.controls.modeleVoiture.errors.required">This field is mandatory.</span>
                     </mat-error>
                 </mat-form-field>
             </div>

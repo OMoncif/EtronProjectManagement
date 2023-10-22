@@ -31,7 +31,7 @@ export class UserComponent {
       prenom:[null,[Validators.required]],
       adresse:[null,[Validators.required]],
       contactnumber:[null,[Validators.required]],
-      email:[null,[Validators.required]],
+      email:[null,[Validators.required , Validators.pattern(GlobalConstants.emailRegex)]],
       password:[null,[Validators.required]],
       role:[null,[Validators.required]],
       modeleVoiture:[null,[Validators.required]]

@@ -32,4 +32,11 @@ export class EtronService {
   payerFacture(){
     return this.httpClient.get(this.url+"/paiementFacture");
   }
+
+  listNearbyBornes(data: any) {
+    return this.httpClient.post(this.url + '/getBornes', data, {
+      headers: new HttpHeaders().set('content-type', 'application/json')
+    })
+  }
+
 }

@@ -1,0 +1,57 @@
+<main>
+    <!-- <div class="bottom-data">
+      <div class="orders">
+        <div class="header">
+          <i class='bx bx-receipt'></i>
+          <h3>Rechercher Bornes</h3>
+          <a (click)="ListNearbyBornes()"> <i class='bx bx-plus'></i> </a>
+        </div>
+      </div>
+    </div> -->
+    <div class="bottom-data">
+      <div class="orders">
+        <div class="header">
+          <i class='bx bx-receipt'></i>
+          <h3>Rechercher Bornes</h3>
+        </div>
+        
+        <form [formGroup]="locationForm" (ngSubmit)="ListNearbyBornes()" >
+          <mat-form-field>
+            <input matInput formControlName="userLatitude" placeholder="Latitude" required>
+            <mat-error *ngIf="locationForm.controls['userLatitude'].hasError('required')">This field is mandatory.</mat-error>
+          </mat-form-field>
+          <mat-form-field style="margin-left: 70px; ">
+            <input matInput formControlName="userLongitude" placeholder="Longitude" required>
+            <mat-error *ngIf="locationForm.controls['userLongitude'].hasError('required')">This field is mandatory.</mat-error>
+          </mat-form-field>
+          <button mat-raised-button color="primary" type="submit" style="margin-left: 65px; padding: 26px;">List Nearby Charging Stations</button>
+        </form>
+      </div>
+    </div>
+  
+    <div class="bottom-data">
+      <div class="orders">
+        <table>
+          <thead>
+            <tr>
+              <th>Typecharge</th>
+              <th>Latitude</th>
+              <th>Longitude</th>
+              <th>Disponible</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let element of nearbyChargingStations">
+              <td>{{ element.typecharge }}</td>
+              <td>{{ element.latitude }}</td>
+              <td>{{ element.longitude }}</td>
+              <td>{{ element.disponible }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+  
+  <script src="../../assets/index.js"></script>
+  

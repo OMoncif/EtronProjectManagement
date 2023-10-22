@@ -93,13 +93,13 @@ export class ManageBorneComponent {
   handleDeleteAction(values: any) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
-      message: 'delete ' + values.name + ' User',
+      message: 'delete ' + values.typecharge + ' Borne',
       confirmation: true
     };
     const dialogRef = this.dialog.open(ConfirmationComponent, dialogConfig);
     dialogRef.componentInstance?.onEmitStatusChange.subscribe((response) => {
       this.ngxService.start();
-      this.delete(values.id);
+      this.delete(values.idBorne);
       dialogRef.close();
     });
   }

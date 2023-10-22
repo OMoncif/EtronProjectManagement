@@ -99,12 +99,12 @@ export class ManageAbonnementComponent {
     const dialogRef = this.dialog.open(ConfirmationComponent, dialogConfig);
     dialogRef.componentInstance?.onEmitStatusChange.subscribe((response) => {
       this.ngxService.start();
-      this.delete(values.id);
+      this.delete(values.type);
       dialogRef.close();
     });
   }
-  delete(id: any) {
-    this.abonnementService.delete(id).subscribe(
+  delete(type: any) {
+    this.abonnementService.delete(type).subscribe(
       (response: any) => {
         this.ngxService.stop();
         this.tableData();

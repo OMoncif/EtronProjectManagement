@@ -21,12 +21,12 @@
             <!-- Use Angular *ngFor to loop through the data -->
             <tr *ngFor="let element of dataSource.data">
               <td>
-                <p>{{ element.typeCharge }}</p>
+                {{ element.typeCharge }}
               </td>
-              <td>{{ element.quantiteEnergie }}</td>
+              <td>{{ element.quantiteEnergie }} kWh</td>
               
               <td>{{ element.dateHeureRecharge }}</td>
-              <td>{{ element.dureeRecharge }}</td>
+              <td>{{ element.dureeRecharge }} min</td>
               
               
               

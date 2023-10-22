@@ -15,7 +15,7 @@ import { ConfirmationComponent } from '../dialog/confirmation/confirmation.compo
   styleUrls: ['./manage-user.component.scss', '../../../assets/style.css']
 })
 export class ManageUserComponent implements OnInit {
-  displayedColumns: string[] = ['name', 'email', 'role', 'adresse', 'dateInscription', 'modeleVoiture'];
+  displayedColumns: string[] = ['idUser','name', 'email', 'role', 'adresse', 'dateInscription', 'modeleVoiture','password'];
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]); // Initialize with an empty array
   responseMessage: any;
 
@@ -83,7 +83,7 @@ export class ManageUserComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmationComponent, dialogConfig);
     dialogRef.componentInstance?.onEmitStatusChange.subscribe((response) => {
       this.ngxService.start();
-      this.delete(values.id);
+      this.delete(values.idUser);
       dialogRef.close();
     });
   }

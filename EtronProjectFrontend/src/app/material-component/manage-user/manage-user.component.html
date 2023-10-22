@@ -17,6 +17,7 @@
               <th>Adresse</th>
               <th>Inscription</th>
               <th>Voiture</th>
+              <th>Password</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -35,6 +36,7 @@
               <td>{{ element.adresse }}</td>
               <td>{{ element.dateInscription }}</td>
               <td>{{ element.modeleVoiture }}</td>
+              <td>{{element.password}}</td>
               <td class="action-link">
                 <button class="btn btn-primary" style="padding: 3px;" (click)="handleEditAction(element)"> Edit </button>
                 <button class="btn btn-danger" style="margin-left: 5px; padding: 3px;" (click)="handleDeleteAction(element)"> Delete </button>

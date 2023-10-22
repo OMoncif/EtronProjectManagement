@@ -78,7 +78,7 @@
                             
                             <td>{{ element.userEmail }}</td>
                             <td>{{element.abonnementPlanType}}</td>
-                            <td>{{element.fraisMois}}</td>
+                            <td>{{element.fraisMois}}$</td>
                           </tr>
                     </tbody>
                 </table>
@@ -97,6 +97,10 @@
                         <div class="task-title">
                             <!-- <i class='bx bx-check-circle'></i> -->
                             <p>{{element.type}}</p>
+                        </div>
+                        <div class="task-title">
+                            <!-- <i class='bx bx-check-circle'></i> -->
+                            <p>{{element.dureeContrat}} mois</p>
                         </div>
                         <div class="task-title">
                             <!-- <i class='bx bx-check-circle'></i> -->
@@ -153,7 +157,7 @@
                         <td>
                           {{ element.dateFacturation }}
                         </td>
-                        <td>{{ element.montantTotal }}</td>
+                        <td>{{ element.montantTotal }}$</td>
                         
                         <td>{{ element.userEmail }}</td>
                         <td>
