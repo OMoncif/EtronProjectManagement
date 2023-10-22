@@ -22,10 +22,10 @@ public class BorneRecharge {
     @ManyToOne
     private User user;
     
-	public int getIdBorne() {
+	public int getId() {
 		return id;
 	}
-	public void setIdBorne(int idBorne) {
+	public void setId(int idBorne) {
 		this.id = idBorne;
 	}
 	public String getTypecharge() {

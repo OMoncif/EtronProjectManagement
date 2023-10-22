@@ -4,6 +4,7 @@ package com.example.demoDTO;
 import java.time.LocalDate;
 
 public class UserDTO {
+	private int idUser;
     private String name;
     private String prenom;
     private String email;
@@ -11,6 +12,7 @@ public class UserDTO {
     private String adresse;
     private String role;
     private String modeleVoiture;
+    private String password;
     private LocalDate dateInscription;
 
     // Getters and setters for the fields
@@ -78,4 +80,22 @@ public class UserDTO {
     public void setDateInscription(LocalDate dateInscription) {
         this.dateInscription = dateInscription;
     }
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public int getIdUser() {
+		return idUser;
+	}
+
+	public void setIdUser(int idUser) {
+		this.idUser = idUser;
+	}
+    
+	
 }

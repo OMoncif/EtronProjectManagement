@@ -11,6 +11,17 @@ public class TestService {
 	    }
 	}
 	
+	public static boolean isStartWithNumber(String inputString) {
+	    if (inputString != null && !inputString.isEmpty()) {
+	        char firstChar = inputString.charAt(0);
+	        // Check if the first character is a digit (0-9)
+	        if (Character.isDigit(firstChar)) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+	
 	public static boolean intPositifNegatif(int number) {
 	    if (number > 0) {
 	        return true;
@@ -22,7 +33,7 @@ public class TestService {
 	}
 	
 	public static boolean doublePositifNegatif(double number) {
-	    if (number > 0) {
+	    if (number >= 0) {
 	        return true;
 	    } else if (number < 0) {
 	        return false;

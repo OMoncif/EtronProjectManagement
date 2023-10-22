@@ -177,68 +177,69 @@ public class AbonnementPlanService {
         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 	
-	public ResponseEntity<String> update(Map<String, String> requestMap) {
-		try {
-			if(jwtFilter.isAdmin()) {
-				if (requestMap.containsKey("type") && requestMap.containsKey("fraismois") && requestMap.containsKey("fraisAC") && requestMap.containsKey("fraisDCHPC") && requestMap.containsKey("fraisHautePuissance") && requestMap.containsKey("fraisBlocageAC") && requestMap.containsKey("fraisBlocageDC") ) {
-    				if(requestMap.get("type") != "" && !TestService.isInteger(requestMap.get("type")) ) {
-    					if(requestMap.get("fraismois") != "" && requestMap.get("fraisAC") != "" && requestMap.get("fraisDCHPC") != "" && requestMap.get("fraisHautePuissance") != "" && requestMap.get("fraisBlocageAC") != "" && requestMap.get("fraisBlocageDC") != "" ) {
-    						if(TestService.doublePositifNegatif(Double.parseDouble(requestMap.get("fraismois"))) && TestService.doublePositifNegatif(Double.parseDouble(requestMap.get("fraisAC"))) && TestService.doublePositifNegatif(Double.parseDouble(requestMap.get("fraisDCHPC"))) && TestService.doublePositifNegatif(Double.parseDouble(requestMap.get("fraisHautePuissance"))) && TestService.doublePositifNegatif(Double.parseDouble(requestMap.get("fraisBlocageAC"))) && TestService.doublePositifNegatif(Double.parseDouble(requestMap.get("fraisBlocageDC"))) ) {
-    							AbonnementPlan plan = planrepos.findById(Integer.parseInt(requestMap.get("idPlan")));
-    							if(plan != null) {
-    								plan.setFraismois(Double.parseDouble(requestMap.get("fraismois")));
-    								plan.setType(requestMap.get("type"));
-    								plan.setDureeContrat(Integer.parseInt(requestMap.get("dureeContrat")));
-    								plan.setFraisAC(Double.parseDouble(requestMap.get("fraisAC")));
-    								plan.setFraisDCHPC(Double.parseDouble(requestMap.get("fraisDCHPC")));
-    								plan.setFraisHautePuissance(Double.parseDouble(requestMap.get("fraisHautePuissance")));
-    								plan.setFraisBlocageAC(Double.parseDouble(requestMap.get("fraisBlocageAC")));
-    								plan.setFraisBlocageDC(Double.parseDouble(requestMap.get("fraisBlocageDC")));
-    								planrepos.save(plan);
-    								return EtronPrjUtils.getResponseEntity(EtronPrjConstants.USER_STATUS, HttpStatus.OK);
-    							}
-    							else {
-    								return EtronPrjUtils.getResponseEntity("Plan id doesn't exist.", HttpStatus.OK);
-    							}
-    						}else {
-    							return EtronPrjUtils.getResponseEntity("Negative Numbers Not Supported , Please Give a Positive Number", HttpStatus.BAD_REQUEST);
-    						}
-    						
-    					}else {
-    						return EtronPrjUtils.getResponseEntity("Missing Argument's Value", HttpStatus.BAD_REQUEST);
-    					}
-    					
-    				}else {
-    					return EtronPrjUtils.getResponseEntity("Type is missing", HttpStatus.BAD_REQUEST);
-    				}
-    				
+    public ResponseEntity<String> update(Map<String, String> requestMap) {
+        try {
+            System.out.println(requestMap);
+            if (jwtFilter.isAdmin()) {
+                if (
+                    requestMap.containsKey("type") && !requestMap.get("type").isEmpty() &&
+                    requestMap.containsKey("fraismois") && !requestMap.get("fraismois").isEmpty() &&
+                    requestMap.containsKey("dureeContrat") && !requestMap.get("dureeContrat").isEmpty() &&
+                    requestMap.containsKey("fraisAC") && !requestMap.get("fraisAC").isEmpty() &&
+                    requestMap.containsKey("fraisDCHPC") && !requestMap.get("fraisDCHPC").isEmpty() &&
+                    requestMap.containsKey("fraisHautePuissance") && !requestMap.get("fraisHautePuissance").isEmpty() &&
+                    requestMap.containsKey("fraisBlocageAC") && !requestMap.get("fraisBlocageAC").isEmpty() &&
+                    requestMap.containsKey("fraisBlocageDC") && !requestMap.get("fraisBlocageDC").isEmpty()) {
+
+
+                    AbonnementPlan plan = planrepos.findByType(requestMap.get("type"));
+
+                    if (plan != null) {
+                        plan.setType(requestMap.get("type"));
+                        plan.setFraismois(Double.parseDouble(requestMap.get("fraismois")));
+                        plan.setDureeContrat(Integer.parseInt(requestMap.get("dureeContrat")));
+                        plan.setFraisAC(Double.parseDouble(requestMap.get("fraisAC")));
+                        plan.setFraisDCHPC(Double.parseDouble(requestMap.get("fraisDCHPC")));
+                        plan.setFraisHautePuissance(Double.parseDouble(requestMap.get("fraisHautePuissance")));
+                        plan.setFraisBlocageAC(Double.parseDouble(requestMap.get("fraisBlocageAC")));
+                        plan.setFraisBlocageDC(Double.parseDouble(requestMap.get("fraisBlocageDC")));
+                        planrepos.save(plan);
+                        return EtronPrjUtils.getResponseEntity(EtronPrjConstants.USER_STATUS, HttpStatus.OK);
+                    } else {
+                        return EtronPrjUtils.getResponseEntity("AbonnementPlan with given id doesn't exist.", HttpStatus.OK);
+                    }
                 } else {
-                    return EtronPrjUtils.getResponseEntity(EtronPrjConstants.INVALID_DATA, HttpStatus.BAD_REQUEST);
+                    return EtronPrjUtils.getResponseEntity("Missing Argument's Value", HttpStatus.BAD_REQUEST);
                 }
-    		} else {
-    			return EtronPrjUtils.getResponseEntity(EtronPrjConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED);
-    		}
-		
-	}
-	catch(Exception e) {
-		e.printStackTrace();
-	}
-	return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
-}
+            } else {
+                return EtronPrjUtils.getResponseEntity(EtronPrjConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED);
+            }
+        } catch (NumberFormatException e) {
+            // Handle the NumberFormatException (e.g., invalid numeric input)
+            String invalidInput = e.getMessage();
+            e.printStackTrace();
+            return EtronPrjUtils.getResponseEntity("Invalid input format for numeric values: " + invalidInput, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            // Handle other exceptions
+            e.printStackTrace();
+        }
+        return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 				
 				
 			
 	
 	
-	public ResponseEntity<String> deletePlan(int idPlan){
+	public ResponseEntity<String> deletePlan(String type){
 		try {
 			if(jwtFilter.isAdmin()) {
-				if(TestService.intPositifNegatif(idPlan)) {
-					AbonnementPlan plan = planrepos.findById(idPlan);
+				if(!TestService.isInteger(type)) {
+					AbonnementPlan plan = planrepos.findByType(type);
 					planrepos.delete(plan);
 					return EtronPrjUtils.getResponseEntity("Abonnement Deleted Successfully", HttpStatus.OK);
 				}else {
-					return EtronPrjUtils.getResponseEntity("Negative Numbers Not Supported , Please Give a Positive id", HttpStatus.BAD_REQUEST);
+					return EtronPrjUtils.getResponseEntity("Numbers Not Supported , Please Give a String value", HttpStatus.BAD_REQUEST);
 				}
 			}else {
 				return EtronPrjUtils.getResponseEntity(EtronPrjConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED);

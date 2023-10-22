@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,7 +37,7 @@ public class BorneRechargeController {
         return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG , HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@PutMapping("/update")
+	@PostMapping("/update")
     public ResponseEntity<String> modifierPlan( @RequestBody Map<String, String> requestMap) {
 		try {
 			return borneservice.update(requestMap);
@@ -48,7 +47,7 @@ public class BorneRechargeController {
         return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG , HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @DeleteMapping("/delete/{idBorne}")
+    @PostMapping("/delete/{idBorne}")
     public ResponseEntity<String> supprimerPlan(@PathVariable("idBorne") int idBorne) {
         try{
         	return borneservice.deleteBorne(idBorne);

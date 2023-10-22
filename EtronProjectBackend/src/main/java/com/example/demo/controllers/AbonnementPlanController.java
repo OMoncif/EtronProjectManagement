@@ -7,7 +7,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -68,10 +67,10 @@ public class AbonnementPlanController {
         return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG , HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @DeleteMapping("/delete/{idPlan}")
-    public ResponseEntity<String> supprimerPlan(@PathVariable("idPlan") int idPlan) {
+    @PostMapping("/delete/{type}")
+    public ResponseEntity<String> supprimerPlan(@PathVariable("type") String type) {
         try{
-        	return planservice.deletePlan(idPlan);
+        	return planservice.deletePlan(type);
         }catch (Exception ex) {
             ex.printStackTrace();
         }

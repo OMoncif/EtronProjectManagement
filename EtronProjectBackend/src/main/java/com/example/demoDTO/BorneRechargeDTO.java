@@ -2,6 +2,7 @@ package com.example.demoDTO;
 
 
 public class BorneRechargeDTO {
+	private int idBorne;
     private String typecharge;
     private double latitude;
     private double longitude;
@@ -40,4 +41,13 @@ public class BorneRechargeDTO {
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
+
+	public int getIdBorne() {
+		return idBorne;
+	}
+
+	public void setIdBorne(int idBorne) {
+		this.idBorne = idBorne;
+	}
+    
 }

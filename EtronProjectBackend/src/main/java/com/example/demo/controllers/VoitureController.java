@@ -59,7 +59,7 @@ public class VoitureController {
         return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG , HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @DeleteMapping("/delete/{idVoiture}")
+    @PostMapping("/delete/{idVoiture}")
     public ResponseEntity<String> supprimerPlan(@PathVariable("idVoiture") int idVoiture) {
         try{
         	return voitureservice.deleteCar(idVoiture);

@@ -88,15 +88,14 @@ public class BorneRechargeService {
     public ResponseEntity<String> update(Map<String, String> requestMap) {
         try {
             if (jwtFilter.isAdmin()) {
-                if (requestMap.containsKey("idBorne") && !requestMap.get("idBorne").isEmpty() &&
+                if (
                     requestMap.containsKey("typecharge") && !requestMap.get("typecharge").isEmpty() &&
                     requestMap.containsKey("latitude") && TestService.isNumeric(requestMap.get("latitude")) &&
                     requestMap.containsKey("longitude") && TestService.isNumeric(requestMap.get("longitude")) &&
                     requestMap.containsKey("disponible") && !requestMap.get("disponible").isEmpty()) {
-                    int idBorne = Integer.parseInt(requestMap.get("idBorne"));
-                    System.out.println(idBorne);
-                    if (TestService.intPositifNegatif(idBorne)) {
-                        BorneRecharge borne = bornerepos.findById(idBorne);
+                        BorneRecharge borne = bornerepos.getBorneByLongitudeAndLatitude(Double.parseDouble(requestMap.get("latitude")),Double.parseDouble(requestMap.get("longitude")));
+                        //BorneRecharge borne = bornerepos.findById((Integer.parseInt(requestMap.get("latitude"))));
+                        System.out.println(borne);
                         if (borne != null) {
                             borne.setTypecharge(requestMap.get("typecharge"));
                             borne.setLatitude(Double.parseDouble(requestMap.get("latitude")));
@@ -107,9 +106,7 @@ public class BorneRechargeService {
                         } else {
                             return EtronPrjUtils.getResponseEntity("BorneRecharge id doesn't exist.", HttpStatus.OK);
                         }
-                    } else {
-                        return EtronPrjUtils.getResponseEntity("Negative Numbers Not Supported, Please Give a Positive Number", HttpStatus.BAD_REQUEST);
-                    }
+                    
                 } else {
                     return EtronPrjUtils.getResponseEntity("Missing or invalid argument values", HttpStatus.BAD_REQUEST);
                 }
@@ -158,6 +155,7 @@ public class BorneRechargeService {
 	            BorneRechargeDTO borneRechargeDTO = new BorneRechargeDTO();
 
 	            // Map data from BorneRecharge to BorneRechargeDTO
+	            borneRechargeDTO.setIdBorne(borneRecharge.getId());
 	            borneRechargeDTO.setTypecharge(borneRecharge.getTypecharge());
 	            borneRechargeDTO.setLatitude(borneRecharge.getLatitude());
 	            borneRechargeDTO.setLongitude(borneRecharge.getLongitude());

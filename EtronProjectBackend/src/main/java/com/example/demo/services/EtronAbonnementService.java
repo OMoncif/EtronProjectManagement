@@ -110,7 +110,7 @@ public class EtronAbonnementService {
         if(requestMap.containsKey("name") && requestMap.containsKey("contactnumber")
                 && requestMap.containsKey("email") && requestMap.containsKey("password") && requestMap.containsKey("adresse") && requestMap.containsKey("prenom") && requestMap.containsKey("role") && requestMap.containsKey("prenom"))
         {
-        	if(requestMap.get("name") != "" && !TestService.isInteger(requestMap.get("name")) && requestMap.get("email") != "" && !TestService.isInteger(requestMap.get("email")) && requestMap.get("adresse") != "" && !TestService.isInteger(requestMap.get("adresse")) && requestMap.get("prenom") != "" && !TestService.isInteger(requestMap.get("prenom")) && requestMap.get("role") != "" && !TestService.isInteger(requestMap.get("role"))) {
+        	if(requestMap.get("name") != "" && !TestService.isInteger(requestMap.get("name")) && !TestService.isStartWithNumber(requestMap.get("name")) && requestMap.get("email") != "" && !TestService.isInteger(requestMap.get("email")) && requestMap.get("adresse") != "" && !TestService.isInteger(requestMap.get("adresse")) && requestMap.get("prenom") != "" && !TestService.isInteger(requestMap.get("prenom")) && !TestService.isStartWithNumber(requestMap.get("prenom")) && requestMap.get("role") != "" && !TestService.isInteger(requestMap.get("role")) && !TestService.isStartWithNumber(requestMap.get("role"))) {
         		return true;
         	}
         	else {
@@ -310,6 +310,7 @@ public class EtronAbonnementService {
 	 
 	 // Connaitre tous les bornes qui se trouvent autour d'un utilisateur d'un rayon max de 5 KM
 	public ResponseEntity<List<BorneRecharge>> ListerBornesRechargeUser(Map<String,String >requestMap){
+		System.out.println(requestMap);
 		try {
 			List<BorneRecharge> bornes = bornerepos.findAll();
 			List<BorneRecharge> bornesProches = new ArrayList<BorneRecharge>();
