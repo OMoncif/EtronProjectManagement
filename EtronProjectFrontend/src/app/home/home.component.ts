@@ -9,7 +9,7 @@ import { error } from 'console';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['../../assets/assets1/style.css', '../../assets/assets1/about.css']
+  styleUrls: ['../../assets/assets1/style.css', '../../assets/assets1/normalize.css']
 })
 export class HomeComponent implements OnInit {
 

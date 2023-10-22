@@ -10,6 +10,7 @@ export interface Menu {
 
 const MENUITEMS = [
     {state:'dashboard',name:'Dashboard',type:'link',icon:'dashboard',role:''},
+    {state:'choisirabonnement',name:'Choisir Plan',type:'link',icon:'dashboard',role:'user'},
     {state:'facture',name:'View Facture',type:'link',icon:'inventory_2',role:''},
     {state:'paiement',name:'View Paiement',type:'link',icon:'inventory_3',role:''},
     {state:'contrat',name:'View Contrat',type:'link',icon:'inventory_1',role:''},

@@ -6,7 +6,7 @@
           <h3>Manage Plans</h3>
           <!-- <i class='bx bx-filter'></i>
           <i class='bx bx-search'></i> -->
-          <a (click)="handleAddAction()"> <i class='bx bx-plus'></i> </a>
+          <!-- <a (click)="handleAddAction()"> <i class='bx bx-plus'></i> </a> -->
           
         </div>
         <table>
@@ -37,8 +37,9 @@
               <td>{{ element.fraisBlocageAC }}</td>
               <td>{{ element.fraisBlocageDC }}</td>
               <td class="action-link">
-                <button class="btn btn-primary" style="padding: 3px;" (click)="handleEditAction(element)"> Edit </button>
-                <button class="btn btn-danger" style="margin-left: 5px; padding: 3px;" (click)="handleDeleteAction(element)"> Delete </button>
+                <button class="btn btn-primary" style="padding: 3px;" (click)="onSubscribeClicked(element.type)"> S'Abonner </button>
+                <!-- <button class="btn btn-danger" style="margin-left: 5px; padding: 3px;" (click)="onSubscribeClicked(element.type)"> Payer  </button> -->
+                <button class="btn btn-danger" *ngIf="isSubscribed" style="margin-left: 5px; padding: 3px;" (click)="handlePayer(element.type)"> Payer  </button>
                 
               </td>
               

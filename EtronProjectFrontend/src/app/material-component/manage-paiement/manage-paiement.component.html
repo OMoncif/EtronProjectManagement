@@ -20,7 +20,7 @@
             <!-- Use Angular *ngFor to loop through the data -->
             <tr *ngFor="let element of dataSource.data">
               <td>
-                <p>{{ element.datePaiement }}</p>
+                {{ element.datePaiement }}
               </td>
               <td>{{ element.montant }}</td>
               <td>{{ element.userEmail }}</td>

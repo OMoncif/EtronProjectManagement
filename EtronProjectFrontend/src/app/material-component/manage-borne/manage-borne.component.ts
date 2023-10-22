@@ -16,7 +16,7 @@ import { BorneComponent } from '../dialog/borne/borne.component';
 })
 export class ManageBorneComponent {
 
-  displayedColumns: string[] = ['typecharge', 'latitude', 'longitude', 'disponible'];
+  displayedColumns: string[] = ['idBorne','typecharge', 'latitude', 'longitude', 'disponible'];
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]); // Initialize with an empty array
   responseMessage: any;
 

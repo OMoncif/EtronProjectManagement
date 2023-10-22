@@ -6,12 +6,11 @@ import { GlobalConstants } from '../shared/global-constants';
 import { MatTableDataSource } from '@angular/material/table';
 import { ContratService } from '../services/contrat.service';
 import { AbonnementService } from '../services/abonnement.service';
-import { UserService } from '../services/user.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ConfirmationComponent } from '../material-component/dialog/confirmation/confirmation.component';
-import { UserComponent } from '../material-component/dialog/user/user.component';
 import { Router } from '@angular/router';
 import { AbonnementComponent } from '../material-component/dialog/abonnement/abonnement.component';
+import { FactureService } from '../services/facture.service';
 @Component({
 	selector: 'app-dashboard',
 	templateUrl: './dashboard.component.html',
@@ -35,7 +34,7 @@ export class DashboardComponent implements AfterViewInit {
 		private ngxService: NgxUiLoaderService,
 		private contratservice: ContratService,
 		private abonnementservice: AbonnementService,
-		private userservice: UserService,
+		private factureservice: FactureService,
 		private snackbarService: SnackbarService,
 		private dialog: MatDialog,
 		private router: Router) {
@@ -91,7 +90,7 @@ export class DashboardComponent implements AfterViewInit {
 	}
 
 	tableData2() {
-		this.userservice.getUsers().subscribe(
+		this.factureservice.getFactures().subscribe(
 			(response: any) => {
 				this.ngxService.stop();
 				console.log('API Response:', response);
@@ -125,7 +124,7 @@ export class DashboardComponent implements AfterViewInit {
 			}
 			this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
 		})
-	}
+	}/*
 
 	handleEditUserAction(values: any) {
 		const dialogConfig = new MatDialogConfig();
@@ -321,6 +320,6 @@ export class DashboardComponent implements AfterViewInit {
 				}
 			);
 		}
-	}
+	}*/
 
 }

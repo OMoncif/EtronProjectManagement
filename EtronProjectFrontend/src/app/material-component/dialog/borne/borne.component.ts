@@ -27,6 +27,7 @@ export class BorneComponent {
 
   ngOnInit(): void {
     this.borneForm = this.formBuilder.group({
+      idBorne:[null,[Validators.required]],
       typecharge:[null,[Validators.required]],
       latitude:[null,[Validators.required]],
       longitude:[null,[Validators.required]],
@@ -51,6 +52,7 @@ export class BorneComponent {
   add() {
     var formData = this.borneForm.value;
     var data = {
+      idBorne: formData.idBorne,
       typecharge: formData.typecharge,
       latitude: formData.latitude,
       longitude: formData.longitude,
@@ -78,7 +80,7 @@ export class BorneComponent {
   edit() {
     var formData = this.borneForm.value;
     var data = {
-      id:this.dialogData.data.id,
+      idBorne:formData.idBorne,
       typecharge: formData.typecharge,
       latitude: formData.latitude,
       longitude: formData.longitude,

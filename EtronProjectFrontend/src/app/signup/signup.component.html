@@ -1,4 +1,4 @@
-<mat-toolbar style="background-color: #149f39;">
+<mat-toolbar style="background-color: #1976D2;">
     <mat-toolbar-row fxLayout="row">
         <span style="color: white;">Signup</span>
         <span class="spacer"></span>
@@ -12,7 +12,7 @@
     <form [formGroup]="signupForm">
         <div fxFlex fxLayout="column">
             <mat-form-field appearance="outline" fxFlex>
-                <mat-label>Name</mat-label>
+                <mat-label>Nom</mat-label>
                 <input matInput formControlName="name" required>
                 <mat-error *ngIf="signupForm.controls.name.touched && signupForm.controls.name.invalid">
                     <span *ngif="signupForm.controls.name.errors.required">This field is mandotory </span>
@@ -20,15 +20,38 @@
                 </mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline" fxFlex>
-                <mat-label>Contact Number</mat-label>
-                <input matInput formControlName="contactNumber" required>
-                <mat-error
-                    *ngIf="signupForm.controls.contactNumber.touched && signupForm.controls.contactNumber.invalid">
-                    <span *ngif="signupForm.controls.contactNumber.errors.required">This field is mandotory </span>
-                    <span *ngif="signupForm.controls.contactNumber.errors.pattern">This field is invalid </span>
+                <mat-label>Prenom</mat-label>
+                <input matInput formControlName="prenom" required>
+                <mat-error *ngIf="signupForm.controls.prenom.touched && signupForm.controls.prenom.invalid">
+                    <span *ngif="signupForm.controls.prenom.errors.required">This field is mandotory </span>
+                    <span *ngif="signupForm.controls.prenom.errors.pattern">This field is invalid </span>
                 </mat-error>
             </mat-form-field>
-
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Contact Number</mat-label>
+                <input matInput formControlName="contactnumber" required>
+                <mat-error
+                    *ngIf="signupForm.controls.contactnumber.touched && signupForm.controls.contactnumber.invalid">
+                    <span *ngif="signupForm.controls.contactnumber.errors.required">This field is mandotory </span>
+                    <span *ngif="signupForm.controls.contactnumber.errors.pattern">This field is invalid </span>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Adresse</mat-label>
+                <input matInput formControlName="adresse" required>
+                <mat-error *ngIf="signupForm.controls.adresse.touched && signupForm.controls.adresse.invalid">
+                    <span *ngif="signupForm.controls.adresse.errors.required">This field is mandotory </span>
+                    <span *ngif="signupForm.controls.adresse.errors.pattern">This field is invalid </span>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Modele Voiture </mat-label>
+                <input matInput formControlName="modeleVoiture" required>
+                <mat-error *ngIf="signupForm.controls.modeleVoiture.touched && signupForm.controls.modeleVoiture.invalid">
+                    <span *ngif="signupForm.controls.modeleVoiture.errors.required">This field is mandotory </span>
+                    <span *ngif="signupForm.controls.modeleVoiture.errors.pattern">This field is invalid </span>
+                </mat-error>
+            </mat-form-field>
             <mat-form-field appearance="outline" fxFlex>
                 <mat-label> Email</mat-label>
                 <input matInput formControlName="email" required>
@@ -86,15 +109,11 @@
                         </mat-form-field>
                       </div> -->
             <mat-form-field appearance="outline" fxFlex>
-                <mat-label>Password</mat-label>
-                <input matInput formControlName="password" type="password" required [type]="hide ? 'password' : 'text'">
-                <button type="button" mat-icon-button matSuffix (click)="hide = !hide"
-                    [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-                    <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
-                </button>
-                <mat-error *ngIf="signupForm.controls.password.touched && signupForm.controls.password.invalid">
-                    <span *ngIf="signupForm.controls.password.errors.required">This field is mandatory.</span>
-                    <span *ngIf="signupForm.controls.password.errors.pattern">This field is invalid.</span>
+                <mat-label>Role</mat-label>
+                <input matInput formControlName="role" required>
+                <mat-error *ngIf="signupForm.controls.role.touched && signupForm.controls.role.invalid">
+                    <span *ngif="signupForm.controls.role.errors.required">This field is mandotory </span>
+                    <span *ngif="signupForm.controls.role.errors.pattern">This field is invalid </span>
                 </mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline" fxFlex>
@@ -108,11 +127,26 @@
                     <span *ngIf="signupForm.controls.password.errors.required">This field is mandatory.</span>
                     <span *ngIf="signupForm.controls.password.errors.pattern">This field is invalid.</span>
                 </mat-error>
-            
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Password</mat-label>
+                <input matInput formControlName="confirmPassword" type="password" required [type]="hide ? 'confirmPassword' : 'text'">
+                <button type="button" mat-icon-button matSuffix (click)="hide = !hide"
+                    [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                    <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+                <mat-error *ngIf="signupForm.controls.confirmPassword.touched && signupForm.controls.confirmPassword.invalid">
+                    <span *ngIf="signupForm.controls.confirmPassword.errors.required">This field is mandatory.</span>
+                    <span *ngIf="signupForm.controls.confirmPassword.errors.pattern">This field is invalid.</span>
+                </mat-error>
+
+
                 <mat-hint *ngIf="validateSubmit() && !(signupForm.controls.confirmPassword.invalid)">
                     <span>New Password & Confirm Password</span>
                 </mat-hint>
             </mat-form-field>
+
 
 
             <!-- signup button -->
@@ -129,14 +163,16 @@
 
             <mat-dialog-actions align="end">
                 <button mat-raised-button color="primary" type="submit" (click)="handleSubmit()"
-                    [disabled]="!(signupForm.valid && signupForm.dirty)" style="background-color: #149f39; color: white;">
+               
+                    style="background-color: #1976D2; color: white;">
                     <mat-icon>save</mat-icon> Signup
                 </button>
                 <button mat-raised-button color="warn" mat-dialog-close><mat-icon>cancel</mat-icon> close</button>
             </mat-dialog-actions>
-
-
-            <!-- 
+        </div>
+    </form>
+</mat-dialog-content>
+<!-- 
             <mat-form-field appearance="standard" fxFlex>
                 <mat-label>Conform Password</mat-label>
                 <input matInput formControlName="confirmPassword" type="password"  required [type]="confirmPassword ? 'password': 'text'">
@@ -153,10 +189,10 @@
             </mat-form-field>
         </div>
     </form>
-</mat-dialog-content> -->
+ -->
 
 
-            <!-- <mat-dialog-content class="mat-typography">
+<!-- <mat-dialog-content class="mat-typography">
     <form [formGroup]="signupForm">
         <div fxFlex fxLayout="column">
             <mat-form-field appearance="standard" fxFlex>

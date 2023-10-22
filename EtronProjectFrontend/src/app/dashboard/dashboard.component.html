@@ -89,11 +89,11 @@
                 <div class="header">
                     <i class='bx bx-note'></i>
                     <h3>Abonnements</h3>
-                    <a (click)="handleAddAction()"> <i class='bx bx-plus'></i> </a>
+                    <!-- <a (click)="handleAddAction()"> <i class='bx bx-plus'></i> </a> -->
 
                 </div>
                 <ul class="task-list" *ngFor="let element of dataSource1.data">
-                    <li class="completed">
+                    <li class="completed" style="margin-bottom: 5px;">
                         <div class="task-title">
                             <!-- <i class='bx bx-check-circle'></i> -->
                             <p>{{element.type}}</p>
@@ -102,11 +102,13 @@
                             <!-- <i class='bx bx-check-circle'></i> -->
                             <p>{{element.fraismois}}$</p>
                         </div>
-                        <div>
+                        
+                        <!-- <div>
                             <p><button class="btn btn-primary" style="padding: 3px;" (click)="handleEditAction(element)"> Edit </button>
                                 <button class="btn btn-danger" style="margin-left: 5px; padding: 3px;" (click)="handleDeleteAction(element)"> Delete </button></p>
-                        </div>
+                        </div> -->
                     </li>
+                    
                     <!-- <li class="completed">
                         <div class="task-title">
                             <i class='bx bx-check-circle'></i>
@@ -131,41 +133,41 @@
             <div class="orders">
                 <div class="header">
                     <i class='bx bx-receipt'></i>
-                    <h3>Users</h3>
-                    <a (click)="handleAddUserAction()"> <i class='bx bx-plus'></i> </a>
+                    <h3>Factures Récentes</h3>
+                    <!-- <a (click)="handleAddUserAction()"> <i class='bx bx-plus'></i> </a> -->
                 </div>
                 <table>
                     <thead>
                       <tr>
-                        <th>User</th>
-                        <th>Email</th>
-                        <th>Role</th>
-                        <th>Adresse</th>
-                        <th>Inscription</th>
-                        <th>Voiture</th>
-                        <th>Actions</th>
+                        <th>
+                            DateFacturation</th>
+                        <th>MontantTotal</th>
+                        <th>Client</th>
+                        <th>Status</th>
+                        
                       </tr>
                     </thead>
                     <tbody>
                       <!-- Use Angular *ngFor to loop through the data -->
                       <tr *ngFor="let element of dataSource2.data">
                         <td>
-                          <p>{{ element.name }}</p>
+                          {{ element.dateFacturation }}
                         </td>
-                        <td>{{ element.email }}</td>
+                        <td>{{ element.montantTotal }}</td>
+                        
+                        <td>{{ element.userEmail }}</td>
                         <td>
-                          <span [ngClass]="element.role === 'admin' ? 'status process' : 'status completed'" style="color: white;">
-                              {{ element.role }}
-                           </span>
-                        </td>
-                        <td>{{ element.adresse }}</td>
-                        <td>{{ element.dateInscription }}</td>
-                        <td>{{ element.modeleVoiture }}</td>
-                        <td class="action-link">
+                            <span [ngClass]="element.status === 'Impayée' ? 'status pending' : 'status completed'" style="color: white;">
+                                {{ element.status }}
+                             </span>
+                          </td>
+                        <!-- <td>{{ element.dateInscription }}</td>
+                        <td>{{ element.modeleVoiture }}</td> -->
+                        <!-- <td class="action-link">
                           <button class="btn btn-primary" style="padding: 3px;" (click)="handleEditUserAction(element)"> Edit </button>
                           <button class="btn btn-danger" style="margin-left: 5px; padding: 3px;" (click)="handleDeleteUserAction(element)"> Delete </button>
                           
-                        </td>
+                        </td> -->
                         
                         
                       </tr>
@@ -175,6 +177,7 @@
                   </table>
             </div>
         </div>
+
         
 
     </main>

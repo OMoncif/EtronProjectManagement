@@ -11,18 +11,21 @@
         <table>
           <thead>
             <tr>
+              <th>NumBorne</th>
               <th>Typecharge</th>
               <th>Latitude</th>
               <th>Longitude</th>
               <th>Disponible</th>
+              <th>Actions</th>
               
             </tr>
           </thead>
           <tbody>
             <!-- Use Angular *ngFor to loop through the data -->
             <tr *ngFor="let element of dataSource.data">
+              <td>{{element.idBorne}}</td>
               <td>
-                <p>{{ element.typecharge }}</p>
+                {{ element.typecharge }}
               </td>
               <td>{{ element.latitude }}</td>
               <td>{{ element.longitude }}</td>

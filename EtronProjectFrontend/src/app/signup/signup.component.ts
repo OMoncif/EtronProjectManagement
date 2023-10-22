@@ -31,8 +31,12 @@ export class SignupComponent implements OnInit {
   ngOnInit(): void {
     this.signupForm = this.formBuilder.group({
       name: [null,[Validators.required, Validators.pattern(GlobalConstants.nameRegex)]],
+      prenom: [null,[Validators.required, Validators.pattern(GlobalConstants.nameRegex)]],
       email: [null,[Validators.required, Validators.pattern(GlobalConstants.emailRegex)]],
-      contactNumber: [null,[Validators.required,Validators.pattern(GlobalConstants.contactNumberRegex)]],
+      adresse: [null,[Validators.required, Validators.pattern(GlobalConstants.nameRegex)]],
+      role: [null,[Validators.required, Validators.pattern(GlobalConstants.nameRegex)]],
+      modeleVoiture: [null,[Validators.required, Validators.pattern(GlobalConstants.nameRegex)]],
+      contactnumber: [null,[Validators.required,Validators.pattern(GlobalConstants.contactNumberRegex)]],
       password: [null, [Validators.required]],
       confirmPassword: [null, [Validators.required]]
     })
@@ -52,8 +56,12 @@ export class SignupComponent implements OnInit {
     var formData = this.signupForm.value;
     var data = {
       name: formData.name,
+      prenom: formData.prenom,
+      adresse: formData.adresse,
+      modeleVoiture: formData.modeleVoiture,
+      role: formData.role,
       email: formData.email,
-      contactNumber: formData.contactNumber,
+      contactnumber: formData.contactnumber,
       password: formData.password,
     }
     this.userService.signUp(data).subscribe((response: any) => {

@@ -12,6 +12,8 @@ import { ManagePaiementComponent } from './manage-paiement/manage-paiement.compo
 import { ManageContratComponent } from './manage-contrat/manage-contrat.component';
 import { ManageBorneComponent } from './manage-borne/manage-borne.component';
 import { ManageVoitureComponent } from './manage-voiture/manage-voiture.component';
+import { ManageRechargeComponent } from './manage-recharge/manage-recharge.component';
+import { ChoisirAbonnementComponent } from './choisir-abonnement/choisir-abonnement.component';
 
 
 export const MaterialRoutes: Routes = [
@@ -102,6 +104,22 @@ export const MaterialRoutes: Routes = [
         canActivate:[RouteGuardService],
         data: {
             expectedRole: ['admin']
+        }
+    },
+    {
+        path:'recharge',
+        component:ManageRechargeComponent,
+        canActivate:[RouteGuardService],
+        data: {
+            expectedRole: ['user']
+        }
+    },
+    {
+        path:'choisirabonnement',
+        component:ChoisirAbonnementComponent,
+        canActivate:[RouteGuardService],
+        data: {
+            expectedRole: ['user']
         }
     },
 ];

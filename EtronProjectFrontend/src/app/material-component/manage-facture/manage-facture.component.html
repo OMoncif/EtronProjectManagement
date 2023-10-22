@@ -3,6 +3,15 @@
         <div class="orders">
             <div class="header">
                 <i class='bx bx-receipt'></i>
+                <h3>Demande Facture</h3>
+                <a (click)="handleAddAction()"> <i class='bx bx-plus'></i> </a>
+            </div>
+        </div>
+    </div>
+    <div class="bottom-data">
+        <div class="orders">
+            <div class="header">
+                <i class='bx bx-receipt'></i>
                 <h3>View Factures</h3>
                 <i class='bx bx-filter'></i>
                 <i class='bx bx-search'></i>
@@ -14,6 +23,7 @@
                         <th>MontantTotal</th>
                         <th>Client</th>
                         <th>Status</th>
+                        <th>Actions</th>
 
                     </tr>
                 </thead>
@@ -21,16 +31,22 @@
                     <!-- Use Angular *ngFor to loop through the data -->
                     <tr *ngFor="let element of dataSource.data">
                         <td>
-                            <p>{{ element.dateFacturation }}</p>
+                            {{ element.dateFacturation }}
                         </td>
                         <td>{{ element.montantTotal }}</td>
 
                         <td>{{ element.userEmail }}</td>
-                        <td><span [ngClass]="element.status === 'Impayée' ? 'status pending' : 'status process'"
+                        <td><span [ngClass]="element.status === 'Impayée' ? 'status pending' : 'status completed'"
                                 style="color: white;">
                                 {{ element.status }}
                             </span>
                         </td>
+                        <td class="action-link">
+                            <button class="btn btn-primary" style="padding: 3px;" (click)="payerFacture()"> Payer </button>
+                            <!-- <button class="btn btn-danger" style="margin-left: 5px; padding: 3px;" (click)="handleDeleteAction(element)"> Delete </button> -->
+                            
+                        </td>
+                          
 
                     </tr>
                     <!-- End of Angular loop -->

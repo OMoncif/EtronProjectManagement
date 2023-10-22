@@ -1,296 +1,366 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+/* Normalize CSS */
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-html,
-body {
-  line-height: 1.4;
-  font-weight: 300;
-  font-family: "Roboto", sans-serif;
-}
-button {
-  padding: 10px 15px;
-  border: none;
-  transition: 0.2s ease-in-out;
-}
-button:hover {
-  opacity: 0.8;
-  transition: 0.2s ease-in-out;
-}
-/* Navigation */
-
-header::after {
-  content: "";
-  background-color: rgba(0, 0, 0, 0.59);
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  z-index: 1;
+  color: white;
+  scroll-behavior: hidden;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
-nav,
-header > section,
-footer > div {
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+* {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+/* Home Page Design */
+#homepage {
   position: relative;
-  z-index: 3;
+  height: 110vh;
+  background-position: center;
+  background-size: cover;
+  background-image: url(https://wallpapercave.com/wp/wp4775115.jpg);
 }
 
-.navbar-light .navbar-nav .nav-link:hover {
-  color: #149f39 !important;
+/* Nav Bar Design  */
+#nav-bar {
+  padding: 20px;
 }
 
-.gold-filled-btn,
-.gold-filled-btn :focus {
-  background-color: #149f39;
-  color: #fff;
-  border: none;
-  outline: none;
-}
-
-.btn-lg {
-  padding: 0.75rem 1.25rem;
-  font-size: 1rem;
-  line-height: 1.5;
-  border-radius: 0.3rem;
-}
-
-.gold-filled-btn:hover {
-  color: #1c1c1c;
-}
-
-.transparent-btn,
-.transparent-btn:focus {
-  padding: calc(0.75rem - 1px) calc(1.25rem - 1px);
-  border: 1px solid #149f39;
-  color: #149f39;
-  background: transparent;
-  outline: none;
-}
-
-.transparent-btn:hover {
-  background-color: #149f39;
-  color: #000;
-}
-
-.gold-text {
-  color: #149f39 !important;
-}
-
-.light-black {
-  background-color: #1c1c1c !important;
-}
-
-.deep-black {
-  background-color: #000000;
-}
-
-.center-text {
-  max-width: 600px;
-  margin: 0 auto !important;
-}
-nav {
-  box-shadow: 5px 5px 5px rgba(1, 1, 1, 0.05);
-  position: sticky;
-  top: 0;
-  margin-bottom: 32px;
-  background: white;
-  padding: 10px;
-  z-index: 50;
-}
-.navigation {
+#nav-bar #nav-list {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-.bar_icon {
-  font-size: 32px;
-}
-
-/* Hero Section */
-.hero {
-  margin-top: 80px;
-  display: flex;
-  gap: 100px;
-  justify-content: center;
-  align-items: center;
-}
-.hero_content {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-.tag {
-  background-color: #149f39;
-  padding: 5px 10px;
-  color: white;
-  align-self: flex-start;
-}
-
-.hero_content h1 {
-  font-size: 72px;
-  line-height: 1.2;
-  font-weight: 400;
-}
-.explore_btn {
-  background: #ffc066;
-  align-self: flex-start;
-}
-
-/* Features Section */
-.features {
-  margin-top: 100px;
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  margin-bottom: 50px;
-}
-.feature {
-  display: flex;
-  gap: 20px;
-  padding: 20px;
-  transition: 0.2s ease-in-out;
-}
-.feature img {
-  width: 72px;
-}
-.feature:hover {
-  transition: 0.2s ease-in-out;
-  box-shadow: 5px 5px 5px rgba(1, 1, 1, 0.05);
-}
-.divider {
-  border: 1px solid #ccc;
-  margin: 20px 0;
-}
-
-/* Menu Section */
-
-.menu {
-  display: flex;
-  flex-direction: column;
-  gap: 50px;
-  margin: 50px 0;
-  align-items: center;
-}
-.menu .tag {
-  align-self: center;
-}
-
-.grid-image {
-  border-radius: 10px;
-  transition: 0.2s ease-in-out;
-  width: 100%;
-  height: 100%;
-}
-.grid-image:hover {
-  transform: scale(1.05);
-  transition: 0.2s ease-in-out;
-}
-.grid {
-  display: grid;
-  gap: 10px;
-  grid-template-areas:
-    "I1 I1 I2 I3"
-    "I1 I1 I2 I7"
-    "I4 I5 I6 I7";
-}
-
-.item1 {
-  grid-area: I1;
-}
-.item2 {
-  grid-area: I2;
-}
-.item3 {
-  grid-area: I3;
-}
-.item4 {
-  grid-area: I4;
-}
-.item5 {
-  grid-area: I5;
-}
-.item6 {
-  grid-area: I6;
-}
-.item7 {
-  grid-area: I7;
-}
-
-/* Footer Section */
-
-footer {
-  background-color: #fff0db;
-}
-.link_lists h3 {
-  margin-bottom: 10px;
-  color: gray;
-}
-.link_lists ul {
   list-style: none;
 }
-.link_lists ul li {
-  font-size: 16px;
-  margin-bottom: 5px;
-}
-.news_letter h3 {
-  margin-bottom: 10px;
-  color: gray;
-}
-.news_letter input {
-  padding: 5px 40px;
-  margin-bottom: 10px;
-}
-.footer_container {
-  padding: 30px;
-  display: flex;
-  justify-content: space-between;
-}
-.icon_container {
-  display: flex;
-  gap: 15px;
-  font-size: 32px;
-}
-@media (max-width: 786px) {
-  .hero {
-    flex-direction: column;
-  }
 
-  .hero_image {
+#nav-bar #nav-list .logo {
+  width: 60vw;
+}
+
+#nav-bar #nav-list .logo img {
+  width: 50px;
+}
+
+#nav-bar .list-item {
+  text-transform: uppercase;
+  margin-right: 20px;
+  padding-bottom: 5px;
+}
+
+#nav-bar .list-item:hover {
+  border-bottom: 2px solid white;
+}
+
+#nav-bar .list-item-icon {
+  padding-right: 20px;
+  padding-bottom: 5px;
+}
+
+#nav-bar .list-item-icon:hover {
+  transform: scale(1.2);
+  transition: all 0.1 ease;
+}
+
+/* Hompage quotes Text Styling */
+
+#homepage-quotes-area {
+  position: absolute;
+  right: 20%;
+  top: 20%;
+  transform: translate(50%, 50%);
+  width: 35%;
+}
+
+#homepage-quotes-heading {
+  font-size: 50px;
+  font-style: italic;
+  font-weight: 300;
+  letter-spacing: 2px;
+}
+
+#homepage-quotes-desc {
+  color: rgba(255, 255, 255, 0.815);
+  line-height: 25px;
+}
+
+#overlay-bottom {
+  position: absolute;
+  height: 50%;
+  width: 100%;
+  bottom: 0%;
+  background: linear-gradient(transparent, black);
+}
+
+/* intro section design  */
+
+#intro {
+  position: relative;
+  background-image: url("https://i0.wp.com/goldwallpapers.com/uploads/posts/audi-a5-wallpaper/audi_a5_wallpaper_010.jpg");
+  background-size: cover;
+  background-position: bottom bottom;
+  height: 100vh;
+}
+
+#intro .overlay {
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.662);
+}
+
+#intro-text-area {
+  position: absolute;
+  top: -5%;
+  left: 50%;
+  width: 40%;
+  transform: translate(-50%, -7%);
+}
+
+#intro-heading {
+  position: relative;
+  text-align: center;
+  font-size: 45px;
+  font-weight: 200;
+  font-style: italic;
+  letter-spacing: 1px;
+}
+
+#intro-heading span {
+  z-index: -1;
+  position: absolute;
+  left: 21%;
+  padding: 0 10px;
+  background-color: red;
+}
+
+#intro-des {
+  color: rgba(255, 255, 255, 0.815);
+  text-align: center;
+  line-height: 25px;
+}
+
+/* Performance info design  */
+
+#performance-info {
+    position: relative;
     display: flex;
     justify-content: center;
-  }
-  .hero_image img {
-    width: 80%;
-  }
-  .hero_content {
-    gap: 10px;
+    height: 100vh;
+    background-color: black;
+}
 
-    padding: 0 20px;
-  }
-  .hero_content h1 {
-    font-size: 32px;
-  }
-  .features {
+#performance-info-text {
+    height: 100vh;
+    width: 100vw;
+}
+
+#performance-info-img {
+    position: absolute;
+    transform: rotate(90deg);
+    width: 40vw;
+    left: 1%;
+    top: 20%;
+    transform: translate(0 50%);
+}
+
+#performance-info-text {
+    position: absolute;
+    transform: translate(50%, 25%);
+    z-index: 1;
+    height: 70vh;
+    width: 30vw;
+}
+
+#performance-info-text-heading {
+    font-style: italic;
+    font-weight: 100;
+    font-size: 52px;
+}
+
+#performance-info-text-heading span {
+    z-index: -1;
+    position: absolute;
+    left: -4%;
+    padding: 0 10px;
+    background-color: red;
+}
+
+#performance-info-text-des {
+    color: rgba(255, 255, 255, 0.815);
+    text-align: justify;
+    line-height: 30px;
+}
+
+#performance-info-into-number {
+    display: flex;
+    margin-top: 10%;
+}
+
+#performance-info-into-number .info-num {
+    position: relative;
+    margin-right: 80px;
+    font-size: 50px;
+    font-weight: 100;
+}
+
+#performance-info-into-number .info-num sup {
+    color: rgba(255, 255, 255, 0.815);
+    position: absolute;
+    font-size: 15px;
+    top: 10%;
+    width: 70px;
+    margin-left: 5px;
+}
+
+#performance-info-into-number .info-num sup hr {
+    border: 2px solid red;
+    margin-top: 13px;
+    width: 10px;
+}
+
+/* footer design */
+
+#footer {
+    position: relative;
+    height: 150vh;
+    background: url(https://th.bing.com/th/id/R.d288782d2ce4bf73380cae051428f82c?rik=S7a%2fHK0lPXzdJQ&riu=http%3a%2f%2fwallup.net%2fwp-content%2fuploads%2f2016%2f01%2f199397-Audi-RS6-Audi_RS4_Avant-Audi_RS6_Avant-Quattro-audi_quattro-camouflage.jpg&ehk=AS%2bnAjS1tntgx5K6a3X3pp3id7iAOAgwW6w9ydOviTQ%3d&risl=&pid=ImgRaw&r=0);
+    background-size: 100% 70%;
+    background-position: center;
+}
+
+#overlay-top {
+    position: absolute;
+    height: 60%;
+    width: 100%;
+    top: 0%;
+    background: linear-gradient(black, transparent);
+}
+
+#footer #performance-info-2-heading {
+    font-size: 40px;
+    position: absolute;
+    left: 50%;
+    top: 5%;
+    transform: translate(-50%, -50%);
+    font-style: italic;
+    font-weight: 200;
+}
+
+#footer #performance-info-2-heading span {
+    z-index: -1;
+    position: absolute;
+    left: -8%;
+    padding: 0 10px;
+    background-color: red;
+}
+
+#footer #performance-info-2-des {
+    line-height: 150%;
+    color: rgba(255, 255, 255, 0.815);
+    text-align: center;
+    width: 45%;
+    font-size: 20px;
+    position: absolute;
+    left: 50%;
+    top: 17%;
+    transform: translate(-50%, -50%);
+    font-weight: 200;
+}
+
+#request-info {
+    position: relative;
+    text-transform: uppercase;
+    position: absolute;
+    font-size: 22px;
+    background-color: transparent;
+    border: none;
+    left: 50%;
+    top: 25%;
+    transform: translate(-50%, -50%);
+}
+
+#request-info i {
+    position: absolute;
+    color: red;
+    font-size: 15px;
+    transform: rotate(90deg);
+    padding-left: 12px;
+}
+
+#overlay-bottom {
+    position: absolute;
+    height: 60%;
+    width: 100%;
+    bottom: 0%;
+    background: linear-gradient(transparent, black);
+}
+
+/* Design Footer */
+
+#footer-area {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    bottom: 3%;
+    width: 100%;
+    text-transform: uppercase;
+}
+
+#footer-left {
+    width: 40%;
+    display: flex;
+    justify-content: space-evenly;
+
+}
+
+#footer-left .heading {
+
+    font-size: 17px;
+    font-weight: 500;
+    margin-bottom: 30px;
+}
+
+#footer-left .item {
+    color: rgba(255, 255, 255, 0.421);
+    font-size: 13px;
+    margin-top: 10px;
+}
+
+#footer-right {
+    display: flex;
     flex-direction: column;
-  }
-  .feature {
-    flex-direction: column;
-  }
-  .grid {
-    padding: 10px;
-  }
-  .grid-image {
-    border-radius: 0px;
-  }
-  .footer_container {
-    flex-direction: column;
-  }
+    align-items: flex-end;
+    justify-content: center;
+    margin-right: 10px;
+    color: rgba(255, 255, 255, 0.493);
+    font-size: 12px;
+}
+
+
+#footer-right #footer-logo img {
+    width: 50px;
+    margin-top: 10px;
+}
+
+#footer-right #copyright {
+    text-align: right;
+    color: rgba(255, 255, 255, 0.538);
+    margin-top: 10px;
+}
+
+#footer-right #footer-text {
+    text-align: end;
+    color: rgba(255, 255, 255, 0.499);
+    width: 60%;
+    line-height: 20px;
+    margin-top: 10px;
 }

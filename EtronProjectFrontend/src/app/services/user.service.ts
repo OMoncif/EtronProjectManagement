@@ -35,7 +35,7 @@ export class UserService {
 
   changePassword(data:any){
     return this.httpClient.post(this.url + 
-      "/user/changePassword/", data, {
+      "/changePassword", data, {
       headers: new HttpHeaders().set('content-Type', 'application/json')
     })
   }
