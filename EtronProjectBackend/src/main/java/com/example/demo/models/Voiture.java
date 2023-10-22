@@ -6,7 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 @Entity
 public class Voiture {
@@ -18,9 +17,6 @@ public class Voiture {
 	private String modele;
 	
 	private LocalDate dateAjoutVoiture;
-	
-	@OneToOne
-	private User user;
 
 	
 
@@ -40,13 +36,7 @@ public class Voiture {
 		this.modele = modele;
 	}
 
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
+	
 
 	public LocalDate getDateAjoutVoiture() {
 		return dateAjoutVoiture;

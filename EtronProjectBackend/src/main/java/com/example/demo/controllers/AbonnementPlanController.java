@@ -11,15 +11,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.constants.EtronPrjConstants;
-import com.example.demo.models.AbonnementPlan;
 import com.example.demo.services.AbonnementPlanService;
 import com.example.demo.utils.EtronPrjUtils;
+import com.example.demoDTO.AbonnementPlanDTO;
 
 @RestController
 @RequestMapping("plan")
@@ -49,9 +48,9 @@ public class AbonnementPlanController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<AbonnementPlan>> getAbonnements(){
+	public ResponseEntity<List<AbonnementPlanDTO>> getAbonnements(){
 		try {
-			return planservice.getAbonnements();
+			return planservice.getAbonnementPlans();
 			
 		} catch(Exception e){
 			e.printStackTrace();
@@ -59,7 +58,7 @@ public class AbonnementPlanController {
 		return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@PutMapping("/update")
+	@PostMapping("/update")
     public ResponseEntity<String> modifierPlan(@RequestBody Map<String, String> requestMap) {
 		try {
 			return planservice.update(requestMap);

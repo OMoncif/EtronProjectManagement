@@ -69,8 +69,7 @@ public class User implements Serializable {
 	 @OneToMany(mappedBy = "user")
 	 private List<Paiement> paiements;
 	 
-	 @OneToOne(mappedBy = "user")
-	 private Voiture voiture;
+
 	 
 	 @OneToMany(mappedBy="user")
 	 private List<BorneRecharge> bornes;
@@ -144,14 +143,6 @@ public class User implements Serializable {
 
 	public void setDateInscription(LocalDate dateInscription) {
 		this.dateInscription = dateInscription;
-	}
-
-	public Voiture getVoiture() {
-		return voiture;
-	}
-
-	public void setVoiture(Voiture voiture) {
-		this.voiture = voiture;
 	}
 
 	public String getContactnumber() {

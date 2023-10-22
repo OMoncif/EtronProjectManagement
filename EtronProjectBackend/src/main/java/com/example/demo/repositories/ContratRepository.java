@@ -14,5 +14,14 @@ public interface ContratRepository extends JpaRepository<Contrat, Integer>{
 	
 	@Query("SELECT c FROM Contrat c WHERE c.user = :user ORDER BY c.dateDebut ASC")
 	List<Contrat> getOldestContratByUser(@Param("user") User user, Pageable pageable);
+	
+	@Query("select c from Contrat c")
+	List<Contrat> getAllContrats();
+	
+	@Query("select c from Contrat c where c.user.email = :email")
+	public List<Contrat> getContratsByUsername(@Param("email") String email);
+	
+	@Query("SELECT c FROM Contrat c WHERE c.user.id = :userId ORDER BY c.dateDebut DESC ")
+	public Contrat getNewestContratByUser(@Param("userId") int userId);
 
 }

@@ -17,10 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.constants.EtronPrjConstants;
-import com.example.demo.models.BorneRecharge;
-import com.example.demo.models.Contrat;
 import com.example.demo.services.BorneRechargeService;
 import com.example.demo.utils.EtronPrjUtils;
+import com.example.demoDTO.BorneRechargeDTO;
 
 @RestController
 @RequestMapping("/borne")
@@ -60,9 +59,9 @@ public class BorneRechargeController {
     }
 	
     @GetMapping
-	public ResponseEntity<List<BorneRecharge>> getBornes(){
+	public ResponseEntity<List<BorneRechargeDTO>> getBornes(){
 		try {
-			return borneservice.getBornes();
+			return borneservice.getBorneRecharges();
 			
 		} catch(Exception e){
 			e.printStackTrace();

@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.models.Contrat;
 import com.example.demo.services.ContratService;
+import com.example.demoDTO.ContratDTO;
 
 @RestController
 @RequestMapping("/contrat")
@@ -22,7 +22,7 @@ public class ContratController {
 	private ContratService contratservice;
 	
 	@GetMapping
-	public ResponseEntity<List<Contrat>> getContrats(){
+	public ResponseEntity<List<ContratDTO>> getContrats(){
 		try {
 			return contratservice.getContrats();
 			

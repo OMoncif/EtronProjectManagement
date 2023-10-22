@@ -54,6 +54,12 @@ public class Paiement {
 	public void setUser(User user) {
 		this.user = user;
 	}
+
+	@Override
+	public String toString() {
+		return "Paiement [id=" + id + ", datePaiement=" + datePaiement + ", montant=" + montant + ", user=" + user
+				+ "]";
+	}
     
     
 

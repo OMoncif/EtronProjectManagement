@@ -47,16 +47,26 @@ public class VoitureService {
         System.out.println("Inside Ajout Voiture:" + requestMap);
     	try {
             if (requestMap.containsKey("modele")) {
-                Voiture voiture = carrepos.findByModele(requestMap.get("modele"));
-                if (Objects.isNull(voiture)) {
-                	Voiture car = new Voiture();
-                	car.setModele(requestMap.get("modele"));
-                	car.setDateAjoutVoiture(LocalDate.now());
-                	carrepos.save(car);
-                    return EtronPrjUtils.getResponseEntity("Car Successfully Registered", HttpStatus.OK);
-                } else {
-                    return EtronPrjUtils.getResponseEntity("Model already exists", HttpStatus.BAD_REQUEST);
-                }
+            	if(!TestService.isInteger(requestMap.get("modele"))) {
+            		if(!requestMap.get("modele").isEmpty()) {
+            			Voiture voiture = carrepos.findByModele(requestMap.get("modele"));
+                        if (Objects.isNull(voiture)) {
+                        	Voiture car = new Voiture();
+                        	car.setModele(requestMap.get("modele"));
+                        	car.setDateAjoutVoiture(LocalDate.now());
+                        	carrepos.save(car);
+                            return EtronPrjUtils.getResponseEntity("Car Successfully Registered", HttpStatus.OK);
+                        } else {
+                            return EtronPrjUtils.getResponseEntity("Car already exists", HttpStatus.BAD_REQUEST);
+                        }
+            		}else {
+            			return EtronPrjUtils.getResponseEntity("Missing Modele Value", HttpStatus.BAD_REQUEST);
+            		}
+            		
+            	}else {
+            		return EtronPrjUtils.getResponseEntity("Please Give a String Value to modele ", HttpStatus.BAD_REQUEST);
+            	}
+                
             } else {
                 return EtronPrjUtils.getResponseEntity(EtronPrjConstants.INVALID_DATA, HttpStatus.BAD_REQUEST);
             }
@@ -83,16 +93,30 @@ public class VoitureService {
 	public ResponseEntity<String> update(Map<String, String> requestMap) {
 		try {
 			if(jwtFilter.isAdmin()) {
-				Voiture car = carrepos.findById(Integer.parseInt(requestMap.get("idVoiture")));
-				if(car != null) {
-					car.setModele(requestMap.get("modele"));
-					car.setDateAjoutVoiture(LocalDate.parse(requestMap.get("dateAjoutVoiture")));
-					carrepos.save(car);
-					return EtronPrjUtils.getResponseEntity(EtronPrjConstants.USER_STATUS, HttpStatus.OK);
+				if(TestService.intPositifNegatif(Integer.parseInt(requestMap.get("idVoiture")))) {
+					if(!TestService.isInteger(requestMap.get("modele"))) {
+						if(!requestMap.get("modele").isEmpty()) {
+							Voiture car = carrepos.findById(Integer.parseInt(requestMap.get("idVoiture")));
+							if(car != null) {
+								car.setModele(requestMap.get("modele"));
+								car.setDateAjoutVoiture(LocalDate.parse(requestMap.get("dateAjoutVoiture")));
+								carrepos.save(car);
+								return EtronPrjUtils.getResponseEntity(EtronPrjConstants.USER_STATUS, HttpStatus.OK);
+							}
+							else {
+								return EtronPrjUtils.getResponseEntity("Car id doesn't exist.", HttpStatus.OK);
+							}
+						}else {
+							return EtronPrjUtils.getResponseEntity("Missing Modele Value", HttpStatus.BAD_REQUEST);
+						}
+						
+					}else {
+						return EtronPrjUtils.getResponseEntity("Please Give a String Value to modele", HttpStatus.BAD_REQUEST);
+					}
+				}else {
+					return EtronPrjUtils.getResponseEntity("idVoiture Must be a Positive Number", HttpStatus.BAD_REQUEST);
 				}
-				else {
-					return EtronPrjUtils.getResponseEntity("Car id doesn't exist.", HttpStatus.OK);
-				}
+				
 			}
 			else {
 				return EtronPrjUtils.getResponseEntity(EtronPrjConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED);
@@ -107,10 +131,14 @@ public class VoitureService {
 	public ResponseEntity<String> deleteCar(int idVoiture){
 		try {
 			if(jwtFilter.isAdmin()) {
+				if(TestService.intPositifNegatif(idVoiture)) {
+					Voiture car = carrepos.findById(idVoiture);
+					carrepos.delete(car);
+					return EtronPrjUtils.getResponseEntity("Car Deleted Successfully", HttpStatus.OK);
+				}else {
+					return EtronPrjUtils.getResponseEntity("IdVoiture must be Positive and not Negative or Zero", HttpStatus.BAD_REQUEST);
+				}	
 				
-				Voiture car = carrepos.findById(idVoiture);
-				carrepos.delete(car);
-				return EtronPrjUtils.getResponseEntity("Car Deleted Successfully", HttpStatus.OK);
 			}else {
 				return EtronPrjUtils.getResponseEntity(EtronPrjConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED);
 			}

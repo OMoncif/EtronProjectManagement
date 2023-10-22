@@ -2,6 +2,7 @@ package com.example.demo.services;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Month;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -87,6 +88,7 @@ public class EtronAbonnementService {
 		System.out.println("Validation Result: " + validateSignUpMap(requestMap));
 		try {
             if (validateSignUpMap(requestMap)) {
+            	
                 User user = userrepos.findByEmail(requestMap.get("email"));
                 if (Objects.isNull(user)) {
                 	userrepos.save(getUserFromMap(requestMap));
@@ -106,9 +108,15 @@ public class EtronAbonnementService {
 
     private boolean validateSignUpMap(Map<String, String> requestMap) {
         if(requestMap.containsKey("name") && requestMap.containsKey("contactnumber")
-                && requestMap.containsKey("email") && requestMap.containsKey("password") && requestMap.containsKey("adresse") && requestMap.containsKey("prenom"))
+                && requestMap.containsKey("email") && requestMap.containsKey("password") && requestMap.containsKey("adresse") && requestMap.containsKey("prenom") && requestMap.containsKey("role") && requestMap.containsKey("prenom"))
         {
-            return true;
+        	if(requestMap.get("name") != "" && !TestService.isInteger(requestMap.get("name")) && requestMap.get("email") != "" && !TestService.isInteger(requestMap.get("email")) && requestMap.get("adresse") != "" && !TestService.isInteger(requestMap.get("adresse")) && requestMap.get("prenom") != "" && !TestService.isInteger(requestMap.get("prenom")) && requestMap.get("role") != "" && !TestService.isInteger(requestMap.get("role"))) {
+        		return true;
+        	}
+        	else {
+        		return false;
+        	}
+            
         }
         return false;
     }
@@ -123,7 +131,7 @@ public class EtronAbonnementService {
         user.setAdresse(requestMap.get("adresse"));
         user.setDateInscription(LocalDate.now());
         user.setModeleVoiture(requestMap.get("modeleVoiture"));
-        user.setRole("user");
+        user.setRole(requestMap.get("role"));
         return user;
     }
     
@@ -191,31 +199,42 @@ public class EtronAbonnementService {
     
 	public ResponseEntity<String> choisirFormuleAbonnement(Map<String,String> requestMap) {
 		
-		System.out.println("idUser: " + Integer.parseInt(requestMap.get("idUser")) + "typeAbonnement : " + requestMap.get("typeAbonnement"));
 		try {
-			User user = userrepos.findById(Integer.parseInt(requestMap.get("idUser")));
-			boolean eligibleAbonnementGratuit = estEligibleAbonnementGratuit(user);
-	
-	        AbonnementPlan abonnement = planrepos.findByType(requestMap.get("typeAbonnement"));
-	
-	        double fraisMensuels = abonnement.getFraismois(); 
-	
-	        if (eligibleAbonnementGratuit && requestMap.get("typeAbonnement").equals("pro") ) {
-	            fraisMensuels = 0.0; // Abonnement gratuit la première année pour les propriétaires de l'e-tron.
-	        }
-	        if( user.getContrat() == null || user.getContrat().getDateFin().isBefore(LocalDate.now()) ) {
-	        	Contrat contrat = new Contrat();
-	            contrat.setUser(user);
-	            contrat.setDateDebut(LocalDate.now());
-	            contrat.setDateFin(LocalDate.now().plus(1, ChronoUnit.MONTHS));
-	            contrat.setFraisMois(fraisMensuels);
-	            contrat.setPlan(abonnement);
-	            
-	            contratrepos.save(contrat);
-	            
-	            return EtronPrjUtils.getResponseEntity("Abonnement Successfully Chosed & Contrat Created & Waiting For Your Paiement ", HttpStatus.OK);
+			if(requestMap.get("typeAbonnement") != "" ) {
+				if(requestMap.get("typeAbonnement").equals("plus") || requestMap.get("typeAbonnement").equals("pro") || requestMap.get("typeAbonnement").equals("basic")) {
+					User user = userrepos.findByEmail(jwtFilter.getCurrentuser());
+					boolean eligibleAbonnementGratuit = estEligibleAbonnementGratuit(user);
+					System.out.println(eligibleAbonnementGratuit);
+			
+			        AbonnementPlan abonnement = planrepos.findByType(requestMap.get("typeAbonnement"));
+			
+			        double fraisMensuels = abonnement.getFraismois(); 
+			
+			        if (eligibleAbonnementGratuit && requestMap.get("typeAbonnement").equals("pro") ) {
+			            fraisMensuels = 0.0; // Abonnement gratuit la première année pour les propriétaires de l'e-tron.
+			        }
+			        if( user.getContrat() == null || user.getContrat().getDateFin().isBefore(LocalDate.now()) ) {
+			        	Contrat contrat = new Contrat();
+			            contrat.setUser(user);
+			            contrat.setDateDebut(LocalDate.now());
+			            contrat.setDateFin(LocalDate.now().plus(1, ChronoUnit.MONTHS));
+			            contrat.setFraisMois(fraisMensuels);
+			            contrat.setPlan(abonnement);
+			            
+			            contratrepos.save(contrat);
+			            
+			            return EtronPrjUtils.getResponseEntity("Abonnement Successfully Chosed & Contrat Created & Waiting For Your Paiement ", HttpStatus.OK);
+			        }else {
+			        	return EtronPrjUtils.getResponseEntity("Old Contract Not Ended Yet", HttpStatus.INTERNAL_SERVER_ERROR);
+			        }
+				
+		        }else {
+		        	return EtronPrjUtils.getResponseEntity("Please enter the right TypeAbonnement (plus,pro,basic)", HttpStatus.BAD_REQUEST);
+				
+		        }
+			
 	        }else {
-	        	return EtronPrjUtils.getResponseEntity("Old Contract Not Ended Yet ", HttpStatus.INTERNAL_SERVER_ERROR);
+	        	return EtronPrjUtils.getResponseEntity("Missing Argument's Type Value", HttpStatus.BAD_REQUEST);
 	        }
 	        
         
@@ -229,20 +248,37 @@ public class EtronAbonnementService {
 	// Méthode pour effectuer un paiement mensuel
 	public ResponseEntity<String> effectuerPaiementAvecCode(Map<String,String> requestMap) {
 		try {
-			User user = userrepos.findById(Integer.parseInt(requestMap.get("idUser")));
-			AbonnementPlan abonnement = user.getContrat().getPlan();
+			if(requestMap.get("typeAbonnement") != "" && !TestService.isInteger(requestMap.get("typeAbonnement"))) {
+				User user = userrepos.findByEmail(jwtFilter.getCurrentuser());
+				AbonnementPlan abonnement = user.getContrat().getPlan();
+				Contrat contrat = user.getContrat();
+				
+				Month currentMonth = LocalDate.now().getMonth();
+				int mois = currentMonth.getValue(); // Get the month value (1 for January, 2 for February, etc.)
+
+				Paiement paiement1 = paiementrepos.getPaiementByUserAndMonth(user.getId(), mois);
+				if(abonnement != null && abonnement.getType().equals(requestMap.get("typeAbonnement"))) {
+					if (paiement1 == null) {
+			            Paiement paiement = new Paiement();
+			            paiement.setUser(user);
+			            paiement.setDatePaiement(LocalDate.now());
+			            paiement.setMontant(contrat.getFraisMois());
+
+			            paiementrepos.save(paiement);
+
+
+			            return EtronPrjUtils.getResponseEntity(" Paiement Successfully Registered ", HttpStatus.OK); // Paiement réussi
+			        }else {
+			        	return EtronPrjUtils.getResponseEntity(" You paid already for this month , you don't need to do it again :) ", HttpStatus.BAD_REQUEST);
+			        }
+				}else {
+					return EtronPrjUtils.getResponseEntity(" the Code you've entered is not true , please try again ", HttpStatus.BAD_REQUEST);
+				}
+				
+			}else {
+				return EtronPrjUtils.getResponseEntity(" Missing Argument's Type Value ", HttpStatus.BAD_REQUEST);
+			}
 			
-			if (abonnement != null && abonnement.getType().equals(requestMap.get("typeAbonnement"))) {
-	            Paiement paiement = new Paiement();
-	            paiement.setUser(user);
-	            paiement.setDatePaiement(LocalDate.now());
-	            paiement.setMontant(abonnement.getFraismois());
-
-	            paiementrepos.save(paiement);
-
-
-	            return EtronPrjUtils.getResponseEntity("Paiement Successfully Registered", HttpStatus.OK); // Paiement réussi
-	        }
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -254,9 +290,9 @@ public class EtronAbonnementService {
 	}
 	
 	// Paiement facture impayée
-	public ResponseEntity<String> payerFacture(Map<String,String> requestMap) {
+	public ResponseEntity<String> payerFacture() {
 		try {
-			User user = userrepos.findById(Integer.parseInt(requestMap.get("idUser")));
+			User user = userrepos.findByEmail(jwtFilter.getCurrentuser());
 			Facture facture = user.getContrat().getFacture();
 			
 			facture.setStatus("payée");
@@ -297,40 +333,58 @@ public class EtronAbonnementService {
 	public ResponseEntity<String> calculerFactureMensuelle(Map<String,String> requestMap) {
         // Obtenez les données de recharge de l'utilisateur pour le mois et l'année donnés.
 		
-		System.out.println("idUser: " + Integer.parseInt(requestMap.get("idUser")) + "mois : " + requestMap.get("mois") + "annee:" + requestMap.get("annee"));
 		try {
+			System.out.println(requestMap);
+			if(requestMap.containsKey("mois")  && requestMap.containsKey("annee") ) {
+				if(requestMap.get("mois") != "" && requestMap.get("annee") != "" ) {
+					LocalDate currentDate = LocalDate.now();
+					int currentYear = currentDate.getYear();
+					Month currentMonth = currentDate.getMonth();
+					int currentMonthValue = currentMonth.getValue();
+					if(Integer.parseInt(requestMap.get("annee")) > currentYear || (Integer.parseInt(requestMap.get("annee")) == currentYear && Integer.parseInt(requestMap.get("mois")) > currentMonthValue)) {
+						return EtronPrjUtils.getResponseEntity("There is no facture yet for this date , please try a date before Today's date", HttpStatus.BAD_REQUEST);
+					}else {
+						User user = userrepos.findByEmail(jwtFilter.getCurrentuser());
+						Facture f = facturerepos.getFactureByUserAndAnneeAndMois(user, Integer.parseInt(requestMap.get("mois")), Integer.parseInt(requestMap.get("annee")));
+				        List<Recharge> recharges = rechargerepos.findByUserAndMoisAndAnnee(user, Integer.parseInt(requestMap.get("mois")), Integer.parseInt(requestMap.get("annee")));
+				        
+				        System.out.println(f + " " + recharges);
+				        if (Objects.isNull(f)) {
+				        	double montantTotal = 0.0;
+
+					        for (Recharge recharge : recharges) {
+					            double quantiteEnergie = recharge.getQuantiteEnergie(); // en kWh
+					            String typeCharge = recharge.getTypeCharge(); // AC, DC/HPC, haute puissance
+					            int dureeRechargeEnMinutes = recharge.getDureeRecharge();
+					            
+					            double coutRecharge = calculerCoutRecharge(quantiteEnergie, typeCharge, user.getContrat().getPlan().getType(), dureeRechargeEnMinutes);
+					            montantTotal += coutRecharge;
+					        }
+
+					        LocalDate dateActuelle = LocalDate.now();
+					        int jourActuel = dateActuelle.getDayOfMonth();
+					        LocalDate dateDemandeFacture = LocalDate.of(Integer.parseInt(requestMap.get("annee")), Integer.parseInt(requestMap.get("mois")), jourActuel);
+					        Facture facture = new Facture();
+					        facture.setContrat(user.getContrat());
+					        facture.setDateFacturation(dateDemandeFacture);
+					        facture.setMontantTotal(montantTotal);
+					        facture.setStatus("Impayée");
+					        
+					        facturerepos.save(facture);
+					        
+					        return EtronPrjUtils.getResponseEntity("Facture Successfully Registered", HttpStatus.OK);
+				        } else {
+				        	return EtronPrjUtils.getResponseEntity("Facture Already Exists", HttpStatus.OK);
+				        }
+					}
+					
+				}else {
+					return EtronPrjUtils.getResponseEntity("Missing Argument's Type Value", HttpStatus.BAD_REQUEST);
+				}
+			}else {
+				return EtronPrjUtils.getResponseEntity("Missing Argument", HttpStatus.BAD_REQUEST);
+			}
 			
-			User user = userrepos.findById(Integer.parseInt(requestMap.get("idUser")));
-			Facture f = facturerepos.getFactureByUserAndAnneeAndMois(user, Integer.parseInt(requestMap.get("mois")), Integer.parseInt(requestMap.get("annee")));
-	        List<Recharge> recharges = rechargerepos.findByUserAndMoisAndAnnee(user, Integer.parseInt(requestMap.get("mois")), Integer.parseInt(requestMap.get("annee")));
-	        if (Objects.isNull(f)) {
-	        	double montantTotal = 0.0;
-
-		        for (Recharge recharge : recharges) {
-		            double quantiteEnergie = recharge.getQuantiteEnergie(); // en kWh
-		            String typeCharge = recharge.getTypeCharge(); // AC, DC/HPC, haute puissance
-		            int dureeRechargeEnMinutes = recharge.getDureeRecharge();
-		            
-		            double coutRecharge = calculerCoutRecharge(quantiteEnergie, typeCharge, user.getContrat().getPlan().getType(), dureeRechargeEnMinutes);
-		            montantTotal += coutRecharge;
-		        }
-
-		        LocalDate dateActuelle = LocalDate.now();
-		        int jourActuel = dateActuelle.getDayOfMonth();
-		        LocalDate dateDemandeFacture = LocalDate.of(Integer.parseInt(requestMap.get("annee")), Integer.parseInt(requestMap.get("mois")), jourActuel);
-		        Facture facture = new Facture();
-		        facture.setContrat(user.getContrat());
-		        facture.setDateFacturation(dateDemandeFacture);
-		        facture.setMontantTotal(montantTotal);
-		        facture.setStatus("Impayée");
-		        
-		        facturerepos.save(facture);
-		        
-		        return EtronPrjUtils.getResponseEntity("Facture Successfully Registered", HttpStatus.OK);
-	        } else {
-	        	return EtronPrjUtils.getResponseEntity("Facture Already Exists", HttpStatus.OK);
-	        }
-
 	        
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -405,9 +459,8 @@ public class EtronAbonnementService {
     	
         LocalDate dateAchatEtron = user.getDateInscription();
         LocalDate dateExpirationAbonnementGratuit = dateAchatEtron.plusYears(1);
-
         // Si la date actuelle est antérieure à la date d'expiration de l'abonnement gratuit, l'utilisateur est éligible.
-        return LocalDate.now().isBefore(dateExpirationAbonnementGratuit) && user.getModeleVoiture() == voiturerepos.getDernierModele();
+        return LocalDate.now().isBefore(dateExpirationAbonnementGratuit) && user.getModeleVoiture().equals(voiturerepos.getDernierModele());
     }
     
     public double calculerDistance(double lat1, double lon1, double lat2, double lon2) {

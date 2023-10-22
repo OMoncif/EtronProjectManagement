@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.constants.EtronPrjConstants;
-import com.example.demo.models.Recharge;
 import com.example.demo.services.RechargeService;
 import com.example.demo.utils.EtronPrjUtils;
+import com.example.demoDTO.RechargeDTO;
 
 @RestController
 @RequestMapping("/recharge")
@@ -36,7 +36,7 @@ public class RechargeController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<Recharge>> getRecharges(){
+	public ResponseEntity<List<RechargeDTO>> getRecharges(){
 		try {
 			return rechargeservice.getRecharges();
 			

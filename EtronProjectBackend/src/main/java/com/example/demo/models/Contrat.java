@@ -39,11 +39,11 @@ public class Contrat {
 		this.facture = facture;
 	}
 
-	public int getIdcontrat() {
+	public int getId() {
 		return id;
 	}
 
-	public void setIdcontrat(int id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -85,6 +85,12 @@ public class Contrat {
 
 	public void setFraisMois(double fraisMois) {
 		FraisMois = fraisMois;
+	}
+
+	@Override
+	public String toString() {
+		return "Contrat [id=" + id + ", dateDebut=" + dateDebut + ", dateFin=" + dateFin + ", FraisMois=" + FraisMois
+				+ ", plan=" + plan + ", user=" + user + ", facture=" + facture + "]";
 	}
 	
     

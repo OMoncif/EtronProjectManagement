@@ -110,6 +110,16 @@ public class EtronAbonnementController {
 		return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
+	@GetMapping(value="/paiementFacture")
+	public ResponseEntity<String> effectuerPaiementFacture(){
+		try {
+            return etronabonnementService.payerFacture();
+        }catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return EtronPrjUtils.getResponseEntity(EtronPrjConstants.SOMETHING_WENT_WRONG , HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
 
 	
 	@PostMapping(value="/calculerFactureMensuelle")
