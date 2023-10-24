@@ -375,7 +375,7 @@ public class EtronAbonnementService {
 					        
 					        return EtronPrjUtils.getResponseEntity("Facture Successfully Registered", HttpStatus.OK);
 				        } else {
-				        	return EtronPrjUtils.getResponseEntity("Facture Already Exists", HttpStatus.OK);
+				        	return EtronPrjUtils.getResponseEntity("Facture Already Exists", HttpStatus.BAD_REQUEST);
 				        }
 					}
 					

@@ -139,6 +139,8 @@ public class AbonnementPlanService {
         		return EtronPrjUtils.getResponseEntity("Negative Aregument's Value Not Supported", HttpStatus.BAD_REQUEST);
         	}
         	
+        }catch(IndexOutOfBoundsException ex) {
+        	return EtronPrjUtils.getResponseEntity("Client is not linked to a Plan", HttpStatus.BAD_REQUEST);
         }catch(Exception e) {
         	e.printStackTrace();
         }
